@@ -1,6 +1,11 @@
 <template>
-  <div id="register" class="text-center">
+  <div class="container">
+     <div v-if="stillLoading">
+      <img src="../../img/loading.gif" class="loading"/>
+    </div>
+  <div v-else id="register" class="text-center">
     <form @submit.prevent="register">
+      <img src="../../img/camera-roll.png" id="logo"/>
       <h1>Create Account</h1>
       <div role="alert" v-if="registrationErrors">
         {{ registrationErrorMsg }}
@@ -21,6 +26,7 @@
       <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
     </form>
   </div>
+  </div>
 </template>
 
 <script>
@@ -36,9 +42,15 @@ export default {
         confirmPassword: '',
         role: 'user',
       },
+      stillLoading: true,
       registrationErrors: false,
       registrationErrorMsg: 'There were problems registering this user.',
     };
+  },
+   created() {
+    setTimeout(() => {
+      this.stillLoading = false;
+    }, 1000)
   },
   methods: {
     register() {
@@ -79,5 +91,41 @@ export default {
 }
 label {
   margin-right: 0.5rem;
+  font-weight: bold;
+  font-size: 20px;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #788BFF;
+  background-image: url("../../img/spotlights.png");
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+#register {
+  border-style: solid;
+  border-width: 2px;
+  padding: 50px;
+  font-family: "Franklin Gothic Medium";
+  background-color: #E2FDFF;
+  border-radius: 75px;
+  font-size: 15px;
+}
+h1 {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+}
+#logo {
+  width: 200px;
+  height: 189px;
+  display: block;
+  margin: 0 auto;
+}
+button {
+  font-size: 15px;
+  background-color: #BFD7FF;
 }
 </style>
