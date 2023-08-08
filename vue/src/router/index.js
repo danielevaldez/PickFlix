@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import store from '../store/index'
+import Browser from '../views/Browse'
 
 Vue.use(Router)
 
@@ -51,7 +52,14 @@ const router = new Router({
       component: Register,
       meta: {
         requiresAuth: false
-      }
+      }},
+      {
+        path: "/browse",
+        name: "browse",
+        component: Browser,
+        meta: {
+          requiresAuth: false
+        }
     }
   ]
 })
