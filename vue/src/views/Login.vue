@@ -1,13 +1,16 @@
 <template>
   <div class="container">
     <div v-if="stillLoading">
+      <img id="logo" src="../../img/logo.png" />
       <img src="../../img/loading.gif" class="loading"/>
     </div>
-  <div v-else id="login">
+  <div v-else>
+    <img id="logo" src="../../img/logo.png" />
+    <br>
+    <br>
+  <div id="login">
     <form @submit.prevent="login">
-      <img src="../../img/camera-roll.png" id="logo"/>
       <h1>Login</h1>
-      <br>
       <div role="alert" v-if="invalidCredentials">
         Invalid username and password!
       </div>
@@ -28,6 +31,7 @@
       <p>
       <router-link :to="{ name: 'register' }">Need an account? Sign up.</router-link></p>
     </form>
+  </div>
   </div>
   </div>
 </template>
@@ -78,6 +82,12 @@ export default {
 </script>
 
 <style scoped>
+#logo{
+  margin-top: 100px;
+  display: flex;
+  align-items: top;
+  justify-content: center;
+}
 .form-input-group {
   margin-bottom: 1rem;
 }
@@ -87,32 +97,28 @@ label {
 .container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: top;
   min-height: 100vh;
-  background-color: #788BFF;
+  background-color: #b32222;
   background-image: url("../../img/spotlights.png");
   background-position: center top;
   background-repeat: no-repeat;
 }
 #login {
+  justify-content: center;
+  align-items: center;
   border-style: solid;
   border-width: 2px;
-  padding: 50px;
+  padding: 30px;
   font-family: "Franklin Gothic Medium";
-  background-color: #E2FDFF;
+  background-color: #ffffff;
   border-radius: 75px;
   font-size: 15px;
 }
 h1 {
-  font-size: 40px;
+  font-size: 30px;
   display: flex;
   justify-content: center;
-}
-#logo {
-  width: 200px;
-  height: 189px;
-  display: block;
-  margin: 0 auto;
 }
 label {
   font-weight: bold;
