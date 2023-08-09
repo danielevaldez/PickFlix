@@ -5,9 +5,7 @@ import java.util.Objects;
 
 public class Profile {
     private int profileId;
-    @NotEmpty
     private int userId;
-    @NotEmpty
     private String profileName;
 
     public Profile() {

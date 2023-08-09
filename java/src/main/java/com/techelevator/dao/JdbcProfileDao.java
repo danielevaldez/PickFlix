@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.exception.DaoException;
+import com.techelevator.model.CreateProfileDto;
 import com.techelevator.model.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -39,7 +40,7 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public Profile getProfileById(int id) {
         Profile profile = null;
-        String sql = "SELECT profile_id, user_id, profile_name FROM profile WHERE user_id = ?";
+        String sql = "SELECT profile_id, user_id, profile_name FROM profile WHERE profile_id = ?";
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
@@ -70,12 +71,12 @@ public class JdbcProfileDao implements ProfileDao {
     }
 
     @Override
-    public Profile createProfile(Profile profile) {
+    public Profile createProfile(CreateProfileDto profile) {
         Profile newProfile = null;
         String insertProfileSql = "INSERT INTO profile (user_id, profile_name) values (?, ?) RETURNING profile_id";
 
         try {
-            int newProfileId = jdbcTemplate.queryForObject(insertProfileSql, int.class, profile.getProfileName());
+            int newProfileId = jdbcTemplate.queryForObject(insertProfileSql, int.class, profile.getUserId(), profile.getProfileName());
             newProfile = getProfileById(newProfileId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);

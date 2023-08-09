@@ -2,6 +2,7 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.ProfileDao;
 import com.techelevator.exception.DaoException;
+import com.techelevator.model.CreateProfileDto;
 import com.techelevator.model.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
-@RequestMapping(path = "profileselect/")
+@RequestMapping(path = "/profileselect/")
 public class ProfileController {
 
     private ProfileDao profileDao;
@@ -22,7 +23,7 @@ public class ProfileController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "created", method = RequestMethod.POST)
-    public void addProfile(@Valid @RequestBody Profile newProfile) {
+    public void addProfile(@RequestBody CreateProfileDto newProfile) {
         try {
             Profile profile = profileDao.createProfile(newProfile);
             if (profile == null) {
