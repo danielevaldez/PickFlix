@@ -2,7 +2,7 @@
   <div>
     <header>
       <nav>
-        <img src="../img/123123.png" class="logo">
+        <img src="img\123123.png" class="logo">
         <div class="join-box">
           <p class="join-msg">Movies based on YOUR preference</p>
           <button class="btn join-btn">JOIN NOW</button>
