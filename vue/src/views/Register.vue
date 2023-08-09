@@ -1,12 +1,17 @@
 <template>
   <div class="container">
      <div v-if="stillLoading">
+       <img id="logo" src="../../img/logo.png" />
       <img src="../../img/loading.gif" class="loading"/>
     </div>
-  <div v-else id="register" class="text-center">
+    <div v-else>
+      <img id="logo" src="../../img/logo.png" />
+      <br>
+      <br>
+   <div id="register" class="text-center">
     <form @submit.prevent="register">
-      <img src="../../img/camera-roll.png" id="logo"/>
       <h1>Create Account</h1>
+      <br>
       <div role="alert" v-if="registrationErrors">
         {{ registrationErrorMsg }}
       </div>
@@ -25,6 +30,7 @@
       <button type="submit">Create Account</button>
       <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
     </form>
+  </div>
   </div>
   </div>
 </template>
@@ -97,9 +103,9 @@ label {
 .container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: top;
   min-height: 100vh;
-  background-color: #788BFF;
+  background-color: #b32222;
   background-image: url("../../img/spotlights.png");
   background-position: center top;
   background-repeat: no-repeat;
@@ -107,22 +113,23 @@ label {
 #register {
   border-style: solid;
   border-width: 2px;
-  padding: 50px;
+  padding: 30px;
   font-family: "Franklin Gothic Medium";
-  background-color: #E2FDFF;
+  background-color: #ffffff;
   border-radius: 75px;
   font-size: 15px;
+  color: black;
 }
 h1 {
   font-size: 30px;
   display: flex;
   justify-content: center;
 }
-#logo {
-  width: 200px;
-  height: 189px;
-  display: block;
-  margin: 0 auto;
+#logo{
+  margin-top: 100px;
+  display: flex;
+  align-items: top;
+  justify-content: center;
 }
 button {
   font-size: 15px;
