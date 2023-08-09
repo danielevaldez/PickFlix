@@ -27,7 +27,7 @@ export default {
   name: 'Browse', // component name
   data() {
     return {
-      selectedProfile: 'Profile 1', // selected profile's name
+      selectedProfile: 'Profile 1', // The selected profile's name
       recommendedMovies: [], // Array to store recommended movies
       movies: [
         // ... Movie data ...

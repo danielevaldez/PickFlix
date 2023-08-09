@@ -10,4 +10,5 @@ public interface ProfileDao {
     List<Profile> getProfilesByUserId(int id);
     Profile createProfile(Profile profile);
     //deleteProfile
+    //updateProfile
 }

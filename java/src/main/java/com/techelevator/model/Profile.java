@@ -1,8 +1,13 @@
 package com.techelevator.model;
 
+import javax.validation.constraints.NotEmpty;
+import java.util.Objects;
+
 public class Profile {
     private int profileId;
+    @NotEmpty
     private int userId;
+    @NotEmpty
     private String profileName;
 
     public Profile() {
@@ -45,6 +50,11 @@ public class Profile {
                 ", userId=" + userId +
                 ", profileName='" + profileName + '\'' +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(profileId, userId, profileName);
     }
 }
 
