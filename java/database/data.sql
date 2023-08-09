@@ -23,7 +23,10 @@ CREATE TABLE Movie (
     genre_id INT
 );
 
-INSERT INTO movie (id, movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id)
+ALTER TABLE Movie
+ADD COLUMN movie_photo_url VARCHAR(255);
+
+INSERT INTO movie (id, movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id, )
 VALUES
 (1, 'c1', 'Dumb and Dumber', '107', '1994', 'Filmed and completed during one of the great runs in any actors; career, Jim Carrey is joined by Jeff Daniels in an absolutely ridiculous pair of performances, as two well-intentioned imbeciles who just want to do what’s right. When Lloyd (Carrey) intercepts a briefcase left behind by a woman he drives to the airport, he and his friend Harry (Daniels) go on an unnecessarily difficult journey halfway across the country in the hopes of winning her heart and returning her briefcase, and the adventure only escalates when they discover the contents of said luggage.', 1),
 (2, 'c2', 'Dodgeball: A True Underdog Story', '92', '2004', 'A group of misfits enter a Las Vegas dodgeball tournament in order to save their cherished local gym from the onslaught of a corporate health fitness chain.', '1'),
