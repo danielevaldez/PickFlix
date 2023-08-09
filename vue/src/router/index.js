@@ -5,7 +5,7 @@ import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import store from '../store/index'
-
+import ProfileSelect from '../views/ProfileSelect.vue'
 Vue.use(Router)
 
 /**
@@ -33,6 +33,14 @@ const router = new Router({
       path: "/login",
       name: "login",
       component: Login,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: "/ProfileSelect",
+      name: "ProfileSelect",
+      component: ProfileSelect,
       meta: {
         requiresAuth: false
       }
