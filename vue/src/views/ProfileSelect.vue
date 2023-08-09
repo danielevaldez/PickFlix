@@ -42,7 +42,7 @@
       <form @submit.prevent="create">
         <input v-model="profile.profileName" placeholder="Name" />
         <textarea v-model="newProfileInfo" placeholder="Information"></textarea>
-        <button type="submit" @click="combinedMethod">Add</button>
+        <button type="submit">Add</button>
         <button @click="cancelAddProfile">Cancel</button>
       </form>
     </div>
@@ -70,11 +70,17 @@ export default {
     };
   },
   methods: {
-    combinedMethod() {
-      this.addProfile();
-      this.create();
-    },
     create() {
+      if (
+        this.profile.profileName.trim() !== "" &&
+        this.newProfileInfo.trim() !== ""
+      ) {
+        const newProfile = {
+          name: this.profile.profileName,
+          info: this.newProfileInfo,
+        };
+        this.profiles.push(newProfile);
+      }
       profileService
         .create(this.profile)
         .then((response) => {
@@ -89,21 +95,9 @@ export default {
             this.profileCreationErrorMsg = "Bad Request";
           }
         });
+      this.cancelAddProfile();
     },
     selectProfile() {},
-    addProfile() {
-      if (
-        this.profile.profileName.trim() !== "" &&
-        this.newProfileInfo.trim() !== ""
-      ) {
-        const newProfile = {
-          name: this.profile.profileName,
-          info: this.newProfileInfo,
-        };
-        this.profiles.push(newProfile);
-        this.cancelAddProfile();
-      }
-    },
     cancelAddProfile() {
       this.showAddProfileForm = false;
       this.profile.profileName = "";
