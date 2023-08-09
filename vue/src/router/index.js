@@ -5,12 +5,9 @@ import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import store from '../store/index'
-<<<<<<< HEAD
 import ProfileSelect from '../views/ProfileSelect.vue'
-=======
 import Browser from '../views/Browse'
 
->>>>>>> 90ca66696db15dffa617e58d79120893bbffad15
 Vue.use(Router)
 
 /**
