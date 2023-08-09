@@ -11,6 +11,7 @@
   <div id="login">
     <form @submit.prevent="login">
       <h1>Login</h1>
+      <br>
       <div role="alert" v-if="invalidCredentials">
         Invalid username and password!
       </div>
@@ -114,6 +115,7 @@ label {
   background-color: #ffffff;
   border-radius: 75px;
   font-size: 15px;
+  color: black;
 }
 h1 {
   font-size: 30px;

@@ -11,6 +11,7 @@
    <div id="register" class="text-center">
     <form @submit.prevent="register">
       <h1>Create Account</h1>
+      <br>
       <div role="alert" v-if="registrationErrors">
         {{ registrationErrorMsg }}
       </div>
@@ -117,6 +118,7 @@ label {
   background-color: #ffffff;
   border-radius: 75px;
   font-size: 15px;
+  color: black;
 }
 h1 {
   font-size: 30px;
