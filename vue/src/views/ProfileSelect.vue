@@ -1,13 +1,22 @@
 <template>
   <div>
-    <div class="header">
-      <h1>Select a Profile</h1>
+    <header>
+      <nav>
+        <img src="..\img\123123.png" class="logo" />
+        <div class="join-box">
+          <p class="join-msg">Movies based on YOUR preference</p>
+          <button class="btn join-btn">JOIN NOW</button>
+          <button class="btn">SIGN IN</button>
+        </div>
+      </nav>
+    </header>
+    <div class="select-profile-header">
+      <p class="header-text">Select a Profile</p>
       <div role="alert" v-if="profileCreationErrors">
         {{ profileCreationErrorMsg }}
       </div>
     </div>
     <ul class="profile-list">
-      <!-- Loop through the profiles and create a profile item for each -->
       <li
         class="profile-item"
         v-for="(profile, index) in profiles"
@@ -22,15 +31,12 @@
           </button>
         </div>
       </li>
-      <!-- Add Profile button -->
       <li class="add-profile-item">
         <div class="add-profile-box" @click="showAddProfileForm = true">
           Add Profile
         </div>
       </li>
     </ul>
-
-    <!-- Add Profile Form -->
     <div v-if="showAddProfileForm" class="add-profile-form">
       <!-- Can't get profile to show on page and add to DB -->
       <form @submit.prevent="create">
@@ -111,6 +117,11 @@ export default {
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
   background-image: url("C:\Users\Student\workspace\java-red-finalcapstone-team0\vue\img\browsebg.png");
   background-size: cover;
@@ -216,5 +227,59 @@ body {
 
 .remove-profile-button:hover {
   background-color: #ff0000;
+}
+nav {
+  width: 100%;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  z-index: 9;
+  background: #000;
+  padding: 0 2.5vw;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: auto;
+  width: 150px;
+  padding-top: 10px;
+}
+
+.join-box {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  margin-left: auto;
+}
+
+.join-msg {
+  color: #fff;
+  font-family: Arial;
+}
+
+.btn {
+  border: 1px solid #fff;
+  border-radius: 2px;
+  background: none;
+  color: #fff;
+  height: 35px;
+  padding: 0 10px;
+  margin-left: 10px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.join-btn {
+  background: #dd0e15;
+  border-color: #dd0e15;
+  font-family: Arial;
+}
+.select-profile-header {
+  text-align: center;
+  padding: 20px;
+  color: white;
 }
 </style>

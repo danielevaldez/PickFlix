@@ -10,6 +10,24 @@ INSERT INTO genre (genre_name) VALUES ('Sci-Fi');
 INSERT INTO genre (genre_name) VALUES ('Fantasy');
 
 
+<<<<<<< HEAD
+--Comedy
+--********** POSSIBLY FIX MOVIE ID*************
+CREATE TABLE Movie (
+    id SERIAL PRIMARY KEY,
+    movie_id VARCHAR(10) NOT NULL,
+    movie_title VARCHAR(255) NOT NULL,
+    movie_duration INT,
+    movie_release INT,
+    movie_description TEXT,
+    genre_id INT
+);
+
+ALTER TABLE Movie
+ADD COLUMN movie_photo_url VARCHAR(255);
+
+INSERT INTO movie (id, movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id, )
+=======
 INSERT INTO movie (movie_title, movie_duration, movie_release, movie_description, genre_id)
 VALUES
 ('Dumb and Dumber', '107', '1994', 'Filmed and completed during one of the great runs in any actors; career, Jim Carrey is joined by Jeff Daniels in an absolutely ridiculous pair of performances, as two well-intentioned imbeciles who just want to do what’s right. When Lloyd Carrey intercepts a briefcase left behind by a woman he drives to the airport, he and his friend Harry Daniels go on an unnecessarily difficult journey halfway across the country in the hopes of winning her heart and returning her briefcase, and the adventure only escalates when they discover the contents of said luggage.', '1');
@@ -17,6 +35,7 @@ INSERT INTO movie (movie_title, movie_duration, movie_release, movie_description
 VALUES
 ('Dodgeball: A True Underdog Story', '92', '2004', 'A group of misfits enter a Las Vegas dodgeball tournament in order to save their cherished local gym from the onslaught of a corporate health fitness chain.', '1');
 INSERT INTO movie (movie_title, movie_duration, movie_release, movie_description, genre_id)
+>>>>>>> 7e1c12b83ddc5cddf424444cc09a6a63dd529176
 VALUES
 ('The Hangover', '100', '2009','“Three buddies wake up from a bachelor party in Las Vegas, with no memory of the previous night and the bachelor missing. They make their way around the city in order to find their friend before his wedding.', '1');
 INSERT INTO movie (movie_title, movie_duration, movie_release, movie_description, genre_id)
