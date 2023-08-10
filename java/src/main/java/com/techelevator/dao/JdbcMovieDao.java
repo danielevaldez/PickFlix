@@ -88,11 +88,12 @@ public class JdbcMovieDao implements MovieDao {
     @Override
     public Movie getImagePath(String imagePath) {
         String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id, image_path FROM movie WHERE image_path = ?";
+        Movie movie = null;
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, imagePath);
             while (results.next()) {
-                Movie movie = mapRowToMovie(results);
+                movie = mapRowToMovie(results);
             }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -109,6 +110,7 @@ public class JdbcMovieDao implements MovieDao {
         movie.setMovieRelease(rs.getInt("movie_release"));
         movie.setMovieDescription(rs.getString("movie_description"));
         movie.setGenreId(rs.getInt("genre_id"));
+        movie.setImagePath(rs.getString("image_path"));
         return movie;
     }
 }

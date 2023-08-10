@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -32,5 +32,19 @@ public class ProfileController {
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Profile creation failed.");
         }
+    }
+
+    @RequestMapping(path = "profiles", method = RequestMethod.GET)
+    public List<Profile> getProfiles(@RequestParam int userId) {
+        List<Profile> profileList;
+        try {
+            profileList = profileDao.getProfiles(userId);
+            if (profileList.size() < 1) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to get profiles.");
+            }
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Profile creation failed.");
+        }
+        return profileList;
     }
 }
