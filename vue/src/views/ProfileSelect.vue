@@ -64,7 +64,7 @@
 
 <script>
 import ProfileOptions from '../components/ProfileOptions.vue';
-//import profileService from "../services/ProfileService";
+import profileService from "../services/ProfileService";
 
 export default {
   components: { ProfileOptions },
@@ -76,7 +76,6 @@ export default {
         name: "",
         favoriteGenre: "",
       },
-      userId: this.$store.state.userId,
       profileCreationErrors: false,
       profileCreationErrorMsg: "",
       showAddProfileForm: false,
@@ -90,6 +89,7 @@ export default {
   methods: {
     addProfile() {
       //(api call to add profile using newProfile)
+      profileService.create(this.newProfile);
       //this.profiles = (api call for get profiles using user id)
       this.profiles.push({ ...this.newProfile});
       this.cancelAddProfile();
