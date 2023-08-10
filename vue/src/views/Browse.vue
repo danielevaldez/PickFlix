@@ -2,21 +2,23 @@
   <div>
     <header>
       <nav>
-        <img src="..\img\123123.png" class="logo">
+        <router-link to="/browse"> <!-- Add router-link around the image -->
+          <img src="..\img\123123.png" class="logo" alt="Logo"> <!-- Use relative path for the image source -->
+        </router-link>
         <div class="join-box">
-          <p class="join-msg">Movies based on YOUR preference</p>
-          <button class="btn join-btn">JOIN NOW</button>
-          <button class="btn">SIGN IN</button>
+          <button class="btn logout-btn" @click="logout">LOG OUT</button>
         </div>
       </nav>
     </header>
     <main>
       <!-- Top 5 recommended movies -->
       <section class="recommended-movies">
-        <ul>
-          <li v-for="movie in recommendedMovies" :key="movie.id">{{ movie.title }}</li>
-        </ul>
-        <p class="recommendation-text">Top 5 picks for {{ selectedProfile }} </p>
+        <h2 class="recommendation-text">Top 5 picks for {{ selectedProfile }}</h2>
+        <div class="movie-containers">
+          <div v-for="movie in recommendedMovies" :key="movie.id" class="movie-container" @click="showMovieDetails(movie)">
+            <img :src="movie.poster" alt="Movie Poster" class="movie-poster">
+          </div>
+        </div>
       </section>
     </main>
   </div>
@@ -24,11 +26,11 @@
 
 <script>
 export default {
-  name: 'Browse', // component name
+  name: 'Browse',
   data() {
     return {
-      selectedProfile: 'Profile 1', // The selected profile's name
-      recommendedMovies: [], // Array to store recommended movies
+      selectedProfile: 'Profile 1',
+      recommendedMovies: [],
       movies: [
         // ... Movie data ...
       ],
@@ -36,18 +38,14 @@ export default {
   },
   methods: {
     async fetchRecommendedMoviesForProfile() {
-      try {
-        // fetches recommended movies for selected profile from API
-        const response = await fetch(`/browse/${this.selectedProfile}`);
-        const data = await response.json();
-        this.recommendedMovies = data.movies; // updates recommended movies array to fit profile preferences
-      } catch (error) {
-        console.error('Error fetching recommended movies:', error);
-      }
+    
+    },
+    logout() {
+      this.$store.commit("LOGOUT"); // Clears authentication state
+      this.$router.push("/login"); // Redirects to login page
     },
   },
   mounted() {
-    // fetches and shows recommended movies for selected profile
     this.fetchRecommendedMoviesForProfile();
   },
 };
@@ -108,13 +106,14 @@ export default {
     background: none;
     color: #fff;
     height: 35px;
-    padding: 0 10px;
+    padding: 0 20px;
     margin-left: 10px;
+    margin-bottom: 10px;
     text-transform: uppercase;
     cursor: pointer;
   }
   
-  .join-btn {
+  .logout-btn {
     background: #dd0e15;
     border-color: #dd0e15;
     font-family: Arial;

@@ -9,18 +9,23 @@ public class Movie {
     private int movieRelease;
     private String movieDescription;
     private int genreId;
+    private String imagePath;
 
     public Movie() {
 
     }
 
-    public Movie(int movieId, String movieTitle, int movieDuration, int movieRelease, String movieDescription, int genreId) {
+
+
+    public Movie(int movieId, String movieTitle, int movieDuration, int movieRelease, String movieDescription, int genreId, String imagePath) {
         this.movieId = movieId;
         this.movieTitle = movieTitle;
         this.movieDuration = movieDuration;
         this.movieRelease = movieRelease;
         this.movieDescription = movieDescription;
         this.genreId = genreId;
+        this.imagePath = imagePath;
+
     }
 
     public int getMovieId() {
@@ -69,6 +74,14 @@ public class Movie {
 
     public void setGenreId(int genreId) {
         this.genreId = genreId;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Override
