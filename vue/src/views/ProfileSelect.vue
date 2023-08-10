@@ -11,25 +11,33 @@
         {{ profileCreationErrorMsg }}
       </div>
     </div>
-    <div v-if="showProfileOptions" class="profileOptions" >
-      <profile-options :profile="selectedProfile" @close="closeProfile"></profile-options>
+    <div v-if="showProfileOptions" class="profileOptions">
+      <profile-options
+        :profile="selectedProfile"
+        @close="closeProfile"
+      ></profile-options>
     </div>
     <ul class="profile-list" v-if="!showProfileOptions">
-      <li class="profile-item" v-for="profile in profiles" :key="profile.ID" @click="selectProfile(profile)">
+      <li
+        class="profile-item"
+        v-for="profile in profiles"
+        :key="profile.ID"
+        @click="selectProfile(profile)"
+      >
         <div class="profile-box">
-          <div v-if="profile.favoriteGenre == 'Horror'">
+          <div v-if="profile.profileIcon == 'Horror'">
             <img src="../../img/profileicons/horror.png" class="icons" />
           </div>
-          <div v-if="profile.favoriteGenre == 'Comedy'">
+          <div v-if="profile.profileIcon == 'Comedy'">
             <img src="../../img/profileicons/comedy.png" class="icons" />
           </div>
-          <div v-if="profile.favoriteGenre == 'Action'">
+          <div v-if="profile.profileIcon == 'Action'">
             <img src="../../img/profileicons/action.png" class="icons" />
           </div>
-          <div v-if="profile.favoriteGenre == 'Fantasy'">
+          <div v-if="profile.profileIcone == 'Fantasy'">
             <img src="../../img/profileicons/wizard.png" class="icons" />
           </div>
-          <div v-if="profile.favoriteGenre == 'Sci-Fi'">
+          <div v-if="profile.profileIcon == 'Sci-Fi'">
             <img src="../../img/profileicons/ufo.png" class="icons" />
           </div>
           <div class="profile-name">{{ profile.name }}</div>
@@ -41,20 +49,26 @@
         </div>
       </li>
     </ul>
-    <div v-if="showAddProfileForm" class="add-profile-form" >
-      <form @submit.prevent="create">
+    <div v-if="showAddProfileForm" class="add-profile-form">
+      <form @submit.prevent="addProfile">
         <label for="name" class="addProfileLabels">Name</label>
-        <input v-model="newProfile.name" name="name" class="addProfileInputs"/>
-        <label for="Genre" id="Dropdown" class="addProfileLabels">Favorite Genre</label>
-        <br>
-        <select name="Genre" v-model="newProfile.favoriteGenre" class="addProfileInputs">
+        <input v-model="newProfile.name" name="name" class="addProfileInputs" />
+        <label for="Genre" id="Dropdown" class="addProfileLabels"
+          >Favorite Genre</label
+        >
+        <br />
+        <select
+          name="Genre"
+          v-model="newProfile.profileIcon"
+          class="addProfileInputs"
+        >
           <option value="Comedy">Comedy</option>
           <option value="Sci-Fi">Sci-Fi</option>
           <option value="Action">Action</option>
           <option value="Fantasy">Fantasy</option>
           <option value="Horror">Horror</option>
         </select>
-        <br>
+        <br />
         <button type="submit" @click="addProfile">Add</button>
         <button @click="cancelAddProfile">Cancel</button>
       </form>
@@ -63,8 +77,8 @@
 </template>
 
 <script>
-import ProfileOptions from '../components/ProfileOptions.vue';
-//import profileService from "../services/ProfileService";
+import ProfileOptions from "../components/ProfileOptions.vue";
+import profileService from "../services/ProfileService";
 
 export default {
   components: { ProfileOptions },
@@ -74,44 +88,60 @@ export default {
       profiles: [],
       newProfile: {
         name: "",
-        favoriteGenre: "",
+        profileIcon: "",
+        userId: this.$store.state.userId,
       },
-      userId: this.$store.state.userId,
       profileCreationErrors: false,
       profileCreationErrorMsg: "",
       showAddProfileForm: false,
       showProfileOptions: false,
-      selectedProfile: ''
+      selectedProfile: "",
     };
   },
-  created (){
+  created() {
     //this.profiles = (api call for get profiles using user id)
   },
   methods: {
     addProfile() {
+      console.log(this.newProfile);
+      profileService
+        .create(this.newProfile)
+        .then((response) => {
+          if (response.status == 201) {
+            //Not sure if we do something here? Something in $store.state?
+            // maybe something with UI
+          }
+        })
+        .catch((error) => {
+          const response = error.response;
+          this.profileCreationErrors = true;
+          if (response.status === 400) {
+            this.profileCreationErrorMsg = "Bad Request";
+          }
+        });
+
       //(api call to add profile using newProfile)
       //this.profiles = (api call for get profiles using user id)
-      this.profiles.push({ ...this.newProfile});
       this.cancelAddProfile();
     },
-    closeProfile(action){
-      if (action == 1){
+    closeProfile(action) {
+      if (action == 1) {
         //open the browse page
       } else if (action == 2) {
         //(api call to delete profile using profile name and user id)
         //this.profiles = (api call for get profiles using user id)
       }
-      this.selectedProfile = '';
+      this.selectedProfile = "";
       this.showProfileOptions = false;
     },
     selectProfile(clickedProfile) {
-      this.selectedProfile = { ...clickedProfile};
+      this.selectedProfile = { ...clickedProfile };
       this.showProfileOptions = true;
     },
     cancelAddProfile() {
       this.showAddProfileForm = false;
       this.newProfile.name = "";
-      this.newProfile.favoriteGenre = "";
+      this.newProfile.profileIcon = "";
     },
   },
 };
@@ -122,7 +152,7 @@ export default {
   font-weight: bold;
   font-size: 25px;
   margin-top: 10px;
-  color:#ccc;
+  color: #ccc;
 }
 h1 {
   margin-top: 85px;
@@ -178,7 +208,7 @@ body {
   text-align: center;
   position: relative;
 }
-.addProfileLabels{
+.addProfileLabels {
   font-size: 25px;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   color: white;
@@ -212,7 +242,7 @@ body {
   background-color: #7846ff;
   transform: scale(1.05);
 }
-.profile-box{
+.profile-box {
   background-color: #ccc;
 }
 .icons {

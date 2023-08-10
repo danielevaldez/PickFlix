@@ -7,14 +7,16 @@ public class Profile {
     private int profileId;
     private int userId;
     private String profileName;
+    private String profileIcon;
 
     public Profile() {
     }
 
-    public Profile(int profileId, int userId, String profileName) {
+    public Profile(int profileId, int userId, String profileName, String profileIcon) {
         this.profileId = profileId;
         this.userId = userId;
         this.profileName = profileName;
+        this.profileIcon = profileIcon;
     }
 
     public int getProfileId() {
@@ -41,6 +43,14 @@ public class Profile {
         this.profileName = profileName;
     }
 
+    public String getProfileIcon() {
+        return profileIcon;
+    }
+
+    public void setProfileIcon(String profileIcon) {
+        this.profileIcon = profileIcon;
+    }
+
     @Override
     public String toString() {
         return "Profile{" +
@@ -52,7 +62,7 @@ public class Profile {
 
     @Override
     public int hashCode() {
-        return Objects.hash(profileId, userId, profileName);
+        return Objects.hash(profileId, userId, profileName, profileIcon);
     }
 }
 
