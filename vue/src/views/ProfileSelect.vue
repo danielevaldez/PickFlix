@@ -5,43 +5,49 @@
         <img src="..\img\123123.png" class="logo" />
       </nav>
     </header>
-    <div class="select-profile-header">
+    <div class="select-profile-header" v-if="!showProfileOptions">
       <h1 class="header-text">Select a Profile</h1>
       <div role="alert" v-if="profileCreationErrors">
         {{ profileCreationErrorMsg }}
       </div>
     </div>
-    <ul class="profile-list">
-      <li
-        class="profile-item"
-        v-for="(profile, index) in profiles"
-        :key="index"
-        @click="selectProfile(profile)"
-      >
+    <div v-if="showProfileOptions" class="profileOptions" >
+      <profile-options :profile="selectedProfile" @close="closeProfile"></profile-options>
+    </div>
+    <ul class="profile-list" v-if="!showProfileOptions">
+      <li class="profile-item" v-for="profile in profiles" :key="profile.ID" @click="selectProfile(profile)">
         <div class="profile-box">
+          <div v-if="profile.favoriteGenre == 'Horror'">
+            <img src="../../img/profileicons/horror.png" class="icons" />
+          </div>
+          <div v-if="profile.favoriteGenre == 'Comedy'">
+            <img src="../../img/profileicons/comedy.png" class="icons" />
+          </div>
+          <div v-if="profile.favoriteGenre == 'Action'">
+            <img src="../../img/profileicons/action.png" class="icons" />
+          </div>
+          <div v-if="profile.favoriteGenre == 'Fantasy'">
+            <img src="../../img/profileicons/wizard.png" class="icons" />
+          </div>
+          <div v-if="profile.favoriteGenre == 'Sci-Fi'">
+            <img src="../../img/profileicons/ufo.png" class="icons" />
+          </div>
           <div class="profile-name">{{ profile.name }}</div>
-          <br>
-          <div class="profile-genre">{{ profile.favoriteGenre }}</div>
-          <button class="remove-profile-button" @click="removeProfile(index)">
-            Remove
-          </button>
         </div>
       </li>
-      <li class="add-profile-item">
+      <li class="add-profile-item" v-if="!showProfileOptions">
         <div class="add-profile-box" @click="showAddProfileForm = true">
           Add Profile
         </div>
       </li>
     </ul>
-    <div v-if="showAddProfileForm" class="add-profile-form">
-      <!-- Can't get profile to show on page and add to DB -->
+    <div v-if="showAddProfileForm" class="add-profile-form" >
       <form @submit.prevent="create">
         <label for="name" class="addProfileLabels">Name</label>
-        <input v-model="profile.profileName" name="name" class="addProfileInputs"/>
+        <input v-model="newProfile.name" name="name" class="addProfileInputs"/>
         <label for="Genre" id="Dropdown" class="addProfileLabels">Favorite Genre</label>
         <br>
-        <select name="Genre" v-model="profile.favoriteGenre" class="addProfileInputs">
-          <option value="blank">   </option>
+        <select name="Genre" v-model="newProfile.favoriteGenre" class="addProfileInputs">
           <option value="Comedy">Comedy</option>
           <option value="Sci-Fi">Sci-Fi</option>
           <option value="Action">Action</option>
@@ -49,7 +55,7 @@
           <option value="Horror">Horror</option>
         </select>
         <br>
-        <button type="submit">Add</button>
+        <button type="submit" @click="addProfile">Add</button>
         <button @click="cancelAddProfile">Cancel</button>
       </form>
     </div>
@@ -57,67 +63,67 @@
 </template>
 
 <script>
-import profileService from "../services/ProfileService";
+import ProfileOptions from '../components/ProfileOptions.vue';
+//import profileService from "../services/ProfileService";
 
 export default {
+  components: { ProfileOptions },
   name: "profileselect",
   data() {
     return {
-      // profiles = getProfiles (controller) maybe?  So it persists through logging out etc.
       profiles: [],
-      profile: {
-        profileName: "",
-        //Get userId of currently logged in user instead of hard coding
-        userId: this.$store.state.userId,
-        favoriteGenre: ""
+      newProfile: {
+        name: "",
+        favoriteGenre: "",
       },
+      userId: this.$store.state.userId,
       profileCreationErrors: false,
       profileCreationErrorMsg: "",
       showAddProfileForm: false,
+      showProfileOptions: false,
+      selectedProfile: ''
     };
   },
+  created (){
+    //this.profiles = (api call for get profiles using user id)
+  },
   methods: {
-    create() {
-      if (
-        this.profile.profileName.trim() !== "" &&
-        this.profile.favoriteGenre !== "blank"
-      ) {
-        const newProfile = {
-          name: this.profile.profileName,
-          favoriteGenre: this.profile.favoriteGenre
-        };
-        this.profiles.push(newProfile);
-      }
-      profileService
-        .create(this.profile)
-        .then((response) => {
-          if (response.status == 201) {
-            //Not sure if we do something here? Something in $store.state?
-          }
-        })
-        .catch((error) => {
-          const response = error.response;
-          this.profileCreationErrors = true;
-          if (response.status === 400) {
-            this.profileCreationErrorMsg = "Bad Request";
-          }
-        });
+    addProfile() {
+      //(api call to add profile using newProfile)
+      //this.profiles = (api call for get profiles using user id)
+      this.profiles.push({ ...this.newProfile});
       this.cancelAddProfile();
     },
-    selectProfile() {},
+    closeProfile(action){
+      if (action == 1){
+        //open the browse page
+      } else if (action == 2) {
+        //(api call to delete profile using profile name and user id)
+        //this.profiles = (api call for get profiles using user id)
+      }
+      this.selectedProfile = '';
+      this.showProfileOptions = false;
+    },
+    selectProfile(clickedProfile) {
+      this.selectedProfile = { ...clickedProfile};
+      this.showProfileOptions = true;
+    },
     cancelAddProfile() {
       this.showAddProfileForm = false;
-      this.profile.profileName = "";
-      this.profile.favoriteGenre = "";
-    },
-    removeProfile(index) {
-      this.profiles.splice(index, 1);
+      this.newProfile.name = "";
+      this.newProfile.favoriteGenre = "";
     },
   },
 };
 </script>
 
 <style>
+.profile-name {
+  font-weight: bold;
+  font-size: 25px;
+  margin-top: 10px;
+  color:#ccc;
+}
 h1 {
   margin-top: 85px;
   font-size: 50px;
@@ -150,12 +156,23 @@ body {
 .header {
   text-align: center;
 }
-
+.profileOptions {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .profile-box {
-  width: 120px;
-  height: 120px;
-  border: 2px solid #ccc;
-  padding: 20px;
+  border-radius: 100px;
+  width: 200px;
+  height: 200px;
+  border: 2px solid rgb(74, 101, 250);
+  padding: 5px;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;
   text-align: center;
@@ -192,10 +209,16 @@ body {
 }
 
 .profile-box:hover {
-  background-color: #ff3131;
+  background-color: #7846ff;
   transform: scale(1.05);
 }
-
+.profile-box{
+  background-color: #ccc;
+}
+.icons {
+  width: 100%;
+  height: 100%;
+}
 .add-profile-box:hover {
   background-color: #ff3131;
 }
