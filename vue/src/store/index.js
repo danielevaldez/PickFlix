@@ -21,6 +21,7 @@ export default new Vuex.Store({
   state: {
     token: currentToken || "",
     user: currentUser || {},
+    userId: '',
     //profile: currentProfile || {},
   },
   mutations: {
@@ -32,6 +33,9 @@ export default new Vuex.Store({
     SET_USER(state, user) {
       state.user = user;
       localStorage.setItem("user", JSON.stringify(user));
+    },
+    SET_USER_ID(state, user_id) {
+      state.userId = user_id;
     },
     SET_PROFILE(/*state, profile*/) {
       //state.profile = profile;

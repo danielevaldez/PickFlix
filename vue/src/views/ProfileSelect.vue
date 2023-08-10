@@ -3,15 +3,10 @@
     <header>
       <nav>
         <img src="..\img\123123.png" class="logo" />
-        <div class="join-box">
-          <p class="join-msg">Movies based on YOUR preference</p>
-          <button class="btn join-btn">JOIN NOW</button>
-          <button class="btn">SIGN IN</button>
-        </div>
       </nav>
     </header>
     <div class="select-profile-header">
-      <p class="header-text">Select a Profile</p>
+      <h1 class="header-text">Select a Profile</h1>
       <div role="alert" v-if="profileCreationErrors">
         {{ profileCreationErrorMsg }}
       </div>
@@ -25,7 +20,8 @@
       >
         <div class="profile-box">
           <div class="profile-name">{{ profile.name }}</div>
-          <div class="profile-info">{{ profile.info }}</div>
+          <br>
+          <div class="profile-genre">{{ profile.favoriteGenre }}</div>
           <button class="remove-profile-button" @click="removeProfile(index)">
             Remove
           </button>
@@ -40,8 +36,19 @@
     <div v-if="showAddProfileForm" class="add-profile-form">
       <!-- Can't get profile to show on page and add to DB -->
       <form @submit.prevent="create">
-        <input v-model="profile.profileName" placeholder="Name" />
-        <textarea v-model="newProfileInfo" placeholder="Information"></textarea>
+        <label for="name" class="addProfileLabels">Name</label>
+        <input v-model="profile.profileName" name="name" class="addProfileInputs"/>
+        <label for="Genre" id="Dropdown" class="addProfileLabels">Favorite Genre</label>
+        <br>
+        <select name="Genre" v-model="profile.favoriteGenre" class="addProfileInputs">
+          <option value="blank">   </option>
+          <option value="Comedy">Comedy</option>
+          <option value="Sci-Fi">Sci-Fi</option>
+          <option value="Action">Action</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Horror">Horror</option>
+        </select>
+        <br>
         <button type="submit">Add</button>
         <button @click="cancelAddProfile">Cancel</button>
       </form>
@@ -61,9 +68,9 @@ export default {
       profile: {
         profileName: "",
         //Get userId of currently logged in user instead of hard coding
-        userId: 3,
+        userId: this.$store.state.userId,
+        favoriteGenre: ""
       },
-      newProfileInfo: "",
       profileCreationErrors: false,
       profileCreationErrorMsg: "",
       showAddProfileForm: false,
@@ -73,11 +80,11 @@ export default {
     create() {
       if (
         this.profile.profileName.trim() !== "" &&
-        this.newProfileInfo.trim() !== ""
+        this.profile.favoriteGenre !== "blank"
       ) {
         const newProfile = {
           name: this.profile.profileName,
-          info: this.newProfileInfo,
+          favoriteGenre: this.profile.favoriteGenre
         };
         this.profiles.push(newProfile);
       }
@@ -101,7 +108,7 @@ export default {
     cancelAddProfile() {
       this.showAddProfileForm = false;
       this.profile.profileName = "";
-      this.newProfileInfo = "";
+      this.profile.favoriteGenre = "";
     },
     removeProfile(index) {
       this.profiles.splice(index, 1);
@@ -111,6 +118,18 @@ export default {
 </script>
 
 <style>
+h1 {
+  margin-top: 85px;
+  font-size: 50px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  color: white;
+}
+button {
+  margin-top: 10px;
+  margin-right: 5px;
+  padding: 5px;
+  font-weight: bold;
+}
 * {
   margin: 0;
   padding: 0;
@@ -124,7 +143,10 @@ body {
   color: white;
   font-family: Arial, sans-serif;
 }
-
+.addProfileInputs {
+  width: 200px;
+  font-size: 20px;
+}
 .header {
   text-align: center;
 }
@@ -139,7 +161,11 @@ body {
   text-align: center;
   position: relative;
 }
-
+.addProfileLabels{
+  font-size: 25px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  color: white;
+}
 .add-profile-box {
   width: 120px;
   height: 120px;

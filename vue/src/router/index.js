@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
 import Register from "../views/Register.vue";
@@ -25,11 +24,7 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: Home,
-      meta: {
-        requiresAuth: true,
-      },
+      redirect: {path: "/login"}
     },
     {
       path: "/login",
@@ -68,7 +63,7 @@ const router = new Router({
       name: "browse",
       component: Browser,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
       },
     },
   ],
