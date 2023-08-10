@@ -77,7 +77,11 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import ProfileOptions from "../components/ProfileOptions.vue";
+=======
+import ProfileOptions from '../components/ProfileOptions.vue';
+>>>>>>> 3148ed1223fb2605605901c9a069a24e7fc36509
 import profileService from "../services/ProfileService";
 
 export default {
@@ -121,6 +125,7 @@ export default {
         });
 
       //(api call to add profile using newProfile)
+      profileService.create(this.newProfile);
       //this.profiles = (api call for get profiles using user id)
       this.cancelAddProfile();
     },
