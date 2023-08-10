@@ -34,8 +34,8 @@ public class ProfileController {
         }
     }
 
-    @RequestMapping(path = "profiles", method = RequestMethod.GET)
-    public List<Profile> getProfiles(@RequestParam int userId) {
+    @RequestMapping(path = "profiles/{userId}", method = RequestMethod.GET)
+    public List<Profile> getProfiles(@PathVariable int userId) {
         List<Profile> profileList;
         try {
             profileList = profileDao.getProfiles(userId);

@@ -6,7 +6,7 @@ export default {
   },
 
   getProfiles(userID) {
-    return axios.get("/profiles/" + userID);
+    return axios.get("/profileselect/profiles/" + userID);
   },
 
   addProfile(userID, profile) {
