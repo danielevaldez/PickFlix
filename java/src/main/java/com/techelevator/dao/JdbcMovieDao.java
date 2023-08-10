@@ -22,7 +22,7 @@ public class JdbcMovieDao implements MovieDao {
     @Override
     public List<Movie> getMovies() {
         List<Movie> movies = new ArrayList<>();
-        String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id FROM movie";
+        String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id, image_path FROM movie";
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
@@ -39,7 +39,7 @@ public class JdbcMovieDao implements MovieDao {
     @Override
     public Movie getMovieById(int id) {
         Movie movie = null;
-        String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id FROM movie WHERE movie_id = ?";
+        String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id, image_path FROM movie WHERE movie_id = ?";
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
@@ -55,7 +55,7 @@ public class JdbcMovieDao implements MovieDao {
     @Override
     public Movie getMovieByName(String name) {
         Movie movie = null;
-        String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id FROM movie WHERE movie_name = ?";
+        String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id, image_path FROM movie WHERE movie_name = ?";
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, name);
@@ -84,6 +84,22 @@ public class JdbcMovieDao implements MovieDao {
         }
         return movies;
     }
+
+    @Override
+    public Movie getImagePath(String imagePath) {
+        String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id, image_path FROM movie WHERE image_path = ?";
+
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, imagePath);
+            while (results.next()) {
+                Movie movie = mapRowToMovie(results);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return movie;
+    }
+
 
     private Movie mapRowToMovie(SqlRowSet rs) {
         Movie movie = new Movie();

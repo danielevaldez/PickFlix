@@ -2,9 +2,11 @@
   <div>
     <header>
       <nav>
-        <img src="..\img\123123.png" class="logo">
+        <router-link to="/browse"> <!-- Add router-link around the image -->
+          <img src="..\img\123123.png" class="logo" alt="Logo"> <!-- Use relative path for the image source -->
+        </router-link>
         <div class="join-box">
-          <button class="btn join-btn" @click="logout">LOG OUT</button> <!-- Add log out button -->
+          <button class="btn logout-btn" @click="logout">LOG OUT</button>
         </div>
       </nav>
     </header>
@@ -104,13 +106,14 @@ export default {
     background: none;
     color: #fff;
     height: 35px;
-    padding: 0 10px;
+    padding: 0 20px;
     margin-left: 10px;
+    margin-bottom: 10px;
     text-transform: uppercase;
     cursor: pointer;
   }
   
-  .join-btn {
+  .logout-btn {
     background: #dd0e15;
     border-color: #dd0e15;
     font-family: Arial;
