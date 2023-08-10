@@ -2,38 +2,52 @@
   <div class="container">
     <div v-if="stillLoading">
       <img id="logo" src="../../img/logo.png" />
-      <img src="../../img/loading.gif" class="loading"/>
+      <img src="../../img/loading.gif" class="loading" />
     </div>
-  <div v-else>
-    <img id="logo" src="../../img/logo.png" />
-    <br>
-    <br>
-  <div id="login">
-    <form @submit.prevent="login">
-      <h1>Login</h1>
-      <br>
-      <div role="alert" v-if="invalidCredentials">
-        Invalid username and password!
+    <div v-else>
+      <img id="logo" src="../../img/logo.png" />
+      <br />
+      <br />
+      <div id="login">
+        <form @submit.prevent="login">
+          <h1>Login</h1>
+          <br />
+          <div role="alert" v-if="invalidCredentials">
+            Invalid username and password!
+          </div>
+          <div role="alert" v-if="this.$route.query.registration">
+            Thank you for registering, please sign in.
+          </div>
+          <div class="form-input-group">
+            <label for="username">Username</label>
+            <br />
+            <input
+              type="text"
+              id="username"
+              v-model="user.username"
+              required
+              autofocus
+            />
+          </div>
+          <div class="form-input-group">
+            <label for="password">Password</label>
+            <br />
+            <input
+              type="password"
+              id="password"
+              v-model="user.password"
+              required
+            />
+          </div>
+          <button type="submit">Sign in</button>
+          <p>
+            <router-link :to="{ name: 'register' }"
+              >Need an account? Sign up.</router-link
+            >
+          </p>
+        </form>
       </div>
-      <div role="alert" v-if="this.$route.query.registration">
-        Thank you for registering, please sign in.
-      </div>
-      <div class="form-input-group">
-        <label for="username">Username</label>
-        <br>
-        <input type="text" id="username" v-model="user.username" required autofocus />
-      </div>
-      <div class="form-input-group">
-        <label for="password">Password</label>
-        <br>
-        <input type="password" id="password" v-model="user.password" required />
-      </div>
-      <button type="submit">Sign in</button>
-      <p>
-      <router-link :to="{ name: 'register' }">Need an account? Sign up.</router-link></p>
-    </form>
-  </div>
-  </div>
+    </div>
   </div>
 </template>
 
@@ -42,35 +56,34 @@ import authService from "../services/AuthService";
 
 export default {
   name: "login",
-  components: {
-  },
+  components: {},
   data() {
     return {
       user: {
         username: "",
-        password: ""
+        password: "",
       },
       invalidCredentials: false,
-      stillLoading: true
+      stillLoading: true,
     };
   },
   created() {
     setTimeout(() => {
       this.stillLoading = false;
-    }, 1000)
+    }, 1000);
   },
   methods: {
     login() {
       authService
         .login(this.user)
-        .then(response => {
+        .then((response) => {
           if (response.status == 200) {
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
             this.$store.commit("SET_USER", response.data.user);
-            this.$router.push("/");
+            this.$router.push("/profileselect");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           const response = error.response;
 
           if (response.status === 401) {
@@ -78,12 +91,12 @@ export default {
           }
         });
     },
-  }
+  },
 };
 </script>
 
 <style scoped>
-#logo{
+#logo {
   margin-top: 100px;
   display: flex;
   align-items: top;
@@ -128,6 +141,6 @@ label {
 }
 button {
   font-size: 15px;
-  background-color: #BFD7FF;
+  background-color: #bfd7ff;
 }
 </style>
