@@ -10,6 +10,6 @@ public interface ProfileDao {
     Profile getProfileById(int id);
     List<Profile> getProfilesByUserId(int id);
     Profile createProfile(CreateProfileDto profile);
-    //deleteProfile
+    boolean deleteProfile(int userId, int profileId);
     //updateProfile
 }

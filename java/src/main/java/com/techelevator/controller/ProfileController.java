@@ -47,4 +47,19 @@ public class ProfileController {
         }
         return profileList;
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(path = "profiles/{userId}/{profileId", method = RequestMethod.DELETE)
+    public boolean deleteProfile(@PathVariable int userId, @PathVariable int profileId) {
+        boolean deleted = false;
+        try {
+            deleted = profileDao.deleteProfile(userId, profileId);
+            if (!deleted) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found or unable to delete.");
+            }
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete profile.");
+        }
+        return deleted;
+    }
 }

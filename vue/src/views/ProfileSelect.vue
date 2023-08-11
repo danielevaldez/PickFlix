@@ -20,7 +20,7 @@
     <ul class="profile-list" v-if="!showProfileOptions">
       <li
         class="profile-item"
-        v-for="profile in profiles"
+        v-for="profile in this.$store.state.profiles"
         :key="profile.ID"
         @click="selectProfile(profile)"
       >
@@ -40,7 +40,7 @@
           <div v-if="profile.profileIcon == 'Sci-Fi'">
             <img src="../../img/profileicons/ufo.png" class="icons" />
           </div>
-          <div class="profile-name">{{ profile.name }}</div>
+          <div class="profile-name">{{ profile.profileName }}</div>
         </div>
       </li>
       <li class="add-profile-item" v-if="!showProfileOptions">
@@ -50,7 +50,7 @@
       </li>
     </ul>
     <div v-if="showAddProfileForm" class="add-profile-form">
-      <form @submit.prevent="addProfile">
+      <form @submit.prevent="addProfile()">
         <label for="name" class="addProfileLabels">Name</label>
         <input
           v-model="newProfile.profileName"
@@ -89,8 +89,8 @@ export default {
   name: "profileselect",
   data() {
     return {
-      profiles: [],
       newProfile: {
+        profileId: "",
         profileName: "",
         profileIcon: "",
         userId: this.$store.state.userId,
@@ -102,48 +102,56 @@ export default {
       selectedProfile: "",
     };
   },
-  created() {
-    profileService
+  created(){
+    this.getProfiles();
+  },
+  methods: {
+    getProfiles() {
+      profileService
       .getProfiles(this.newProfile.userId)
       .then((response) => {
-        this.profiles = response.data;
-        console.log(this.profiles);
+        this.$store.commit("SET_PROFILES", response.data);
       })
       .catch((error) => {
         console.error("Error fetching profiles:", error);
       });
-  },
-  methods: {
+    },
     addProfile() {
-      console.log("USER ID BEFORE SUBMISSION" + this.$store.state.userId);
-      console.log("newProfile before submission:", this.newProfile);
       profileService
         .create(this.newProfile)
         .then((response) => {
           if (response.status == 201) {
-            //Not sure if we do something here? Something in $store.state?
-            // maybe something with UI
+            this.getProfiles();
             this.cancelAddProfile();
+            this.showAddProfileForm = false;
           }
         })
         .catch((error) => {
+          console.error("Response:", error.response);
           const response = error.response;
           this.profileCreationErrors = true;
           if (response.status === 400) {
             this.profileCreationErrorMsg = "Bad Request";
             this.cancelAddProfile();
+            this.showAddProfileForm = false;
           }
         });
-
-      //(api call to add profile using newProfile)
-      //this.profiles = (api call for get profiles using user id)
     },
     closeProfile(action) {
       if (action == 1) {
         //open the browse page
       } else if (action == 2) {
-        //(api call to delete profile using profile name and user id)
-        //this.profiles = (api call for get profiles using user id)
+        profileService
+        .deleteProfile(this.selectedProfile.userId, this.selectedProfile.profileId)
+        .then((response) => {
+          if (response.status === 204) {
+            this.getProfiles();
+          }
+      })
+      .catch((error) => {
+        console.error("Error deleting profile:", error);
+      });
+        
       }
       this.selectedProfile = "";
       this.showProfileOptions = false;

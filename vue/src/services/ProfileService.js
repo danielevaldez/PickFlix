@@ -9,15 +9,7 @@ export default {
     return axios.get("/profileselect/profiles/" + userID);
   },
 
-  addProfile(userID, profile) {
-    return axios.post("/profiles/" + userID, profile);
-  },
-
-  updateProfile(userID, profile) {
-    return axios.put("/profiles/" + userID, profile);
-  },
-
-  deleteProfile(profileID) {
-    return axios.delete("/profiles/" + profileID);
-  },
+  deleteProfile(userID, profileID){
+    return axios.delete("/profileselect/profiles/" + userID + "/" + profileID)
+  }
 };
