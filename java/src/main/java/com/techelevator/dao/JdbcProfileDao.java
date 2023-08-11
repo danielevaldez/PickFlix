@@ -40,7 +40,7 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public Profile getProfileById(int id) {
         Profile profile = null;
-        String sql = "SELECT profile_id, user_id, profile_name FROM profile WHERE profile_id = ?;";
+        String sql = "SELECT profile_id, user_id, profile_name, profile_icon FROM profile WHERE profile_id = ?;";
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
@@ -56,7 +56,7 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public List<Profile> getProfilesByUserId(int id) {
         List<Profile> profiles = new ArrayList<>();
-        String sql = "SELECT profile_id, user_id, profile_name FROM profile WHERE user_id = ?;";
+        String sql = "SELECT profile_id, user_id, profile_name, profile_icon FROM profile WHERE user_id = ?;";
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
@@ -89,7 +89,6 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public boolean deleteProfile(int userId, int profileId) {
         String deleteProfileSql = "DELETE FROM profile WHERE user_id = ? AND profile_id = ?;";
-
         try {
             int rowsAffected = jdbcTemplate.update(deleteProfileSql, userId, profileId);
             return rowsAffected > 0;
