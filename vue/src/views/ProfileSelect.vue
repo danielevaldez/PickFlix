@@ -5,50 +5,74 @@
         <img src="..\img\123123.png" class="logo" />
       </nav>
     </header>
-    <div class="select-profile-header">
+    <div class="select-profile-header" v-if="!showProfileOptions">
       <h1 class="header-text">Select a Profile</h1>
       <div role="alert" v-if="profileCreationErrors">
         {{ profileCreationErrorMsg }}
       </div>
     </div>
-    <ul class="profile-list">
+    <div v-if="showProfileOptions" class="profileOptions">
+      <profile-options
+        :profile="selectedProfile"
+        @close="closeProfile"
+      ></profile-options>
+    </div>
+    <ul class="profile-list" v-if="!showProfileOptions">
       <li
         class="profile-item"
-        v-for="(profile, index) in profiles"
-        :key="index"
+        v-for="profile in profiles"
+        :key="profile.ID"
         @click="selectProfile(profile)"
       >
         <div class="profile-box">
+          <div v-if="profile.profileIcon == 'Horror'">
+            <img src="../../img/profileicons/horror.png" class="icons" />
+          </div>
+          <div v-if="profile.profileIcon == 'Comedy'">
+            <img src="../../img/profileicons/comedy.png" class="icons" />
+          </div>
+          <div v-if="profile.profileIcon == 'Action'">
+            <img src="../../img/profileicons/action.png" class="icons" />
+          </div>
+          <div v-if="profile.profileIcon == 'Fantasy'">
+            <img src="../../img/profileicons/wizard.png" class="icons" />
+          </div>
+          <div v-if="profile.profileIcon == 'Sci-Fi'">
+            <img src="../../img/profileicons/ufo.png" class="icons" />
+          </div>
           <div class="profile-name">{{ profile.name }}</div>
-          <br>
-          <div class="profile-genre">{{ profile.favoriteGenre }}</div>
-          <button class="remove-profile-button" @click="removeProfile(index)">
-            Remove
-          </button>
         </div>
       </li>
-      <li class="add-profile-item">
+      <li class="add-profile-item" v-if="!showProfileOptions">
         <div class="add-profile-box" @click="showAddProfileForm = true">
           Add Profile
         </div>
       </li>
     </ul>
     <div v-if="showAddProfileForm" class="add-profile-form">
-      <!-- Can't get profile to show on page and add to DB -->
-      <form @submit.prevent="create">
+      <form @submit.prevent="addProfile">
         <label for="name" class="addProfileLabels">Name</label>
-        <input v-model="profile.profileName" name="name" class="addProfileInputs"/>
-        <label for="Genre" id="Dropdown" class="addProfileLabels">Favorite Genre</label>
-        <br>
-        <select name="Genre" v-model="profile.favoriteGenre" class="addProfileInputs">
-          <option value="blank">   </option>
+        <input
+          v-model="newProfile.profileName"
+          name="name"
+          class="addProfileInputs"
+        />
+        <label for="Genre" id="Dropdown" class="addProfileLabels"
+          >Favorite Genre</label
+        >
+        <br />
+        <select
+          name="Genre"
+          v-model="newProfile.profileIcon"
+          class="addProfileInputs"
+        >
           <option value="Comedy">Comedy</option>
           <option value="Sci-Fi">Sci-Fi</option>
           <option value="Action">Action</option>
           <option value="Fantasy">Fantasy</option>
           <option value="Horror">Horror</option>
         </select>
-        <br>
+        <br />
         <button type="submit">Add</button>
         <button @click="cancelAddProfile">Cancel</button>
       </form>
@@ -57,42 +81,49 @@
 </template>
 
 <script>
+import ProfileOptions from "../components/ProfileOptions.vue";
 import profileService from "../services/ProfileService";
 
 export default {
+  components: { ProfileOptions },
   name: "profileselect",
   data() {
     return {
-      // profiles = getProfiles (controller) maybe?  So it persists through logging out etc.
       profiles: [],
-      profile: {
+      newProfile: {
         profileName: "",
-        //Get userId of currently logged in user instead of hard coding
+        profileIcon: "",
         userId: this.$store.state.userId,
-        favoriteGenre: ""
       },
       profileCreationErrors: false,
       profileCreationErrorMsg: "",
       showAddProfileForm: false,
+      showProfileOptions: false,
+      selectedProfile: "",
     };
   },
+  created() {
+    profileService
+      .getProfiles(this.newProfile.userId)
+      .then((response) => {
+        this.profiles = response.data;
+        console.log(this.profiles);
+      })
+      .catch((error) => {
+        console.error("Error fetching profiles:", error);
+      });
+  },
   methods: {
-    create() {
-      if (
-        this.profile.profileName.trim() !== "" &&
-        this.profile.favoriteGenre !== "blank"
-      ) {
-        const newProfile = {
-          name: this.profile.profileName,
-          favoriteGenre: this.profile.favoriteGenre
-        };
-        this.profiles.push(newProfile);
-      }
+    addProfile() {
+      console.log("USER ID BEFORE SUBMISSION" + this.$store.state.userId);
+      console.log("newProfile before submission:", this.newProfile);
       profileService
-        .create(this.profile)
+        .create(this.newProfile)
         .then((response) => {
           if (response.status == 201) {
             //Not sure if we do something here? Something in $store.state?
+            // maybe something with UI
+            this.cancelAddProfile();
           }
         })
         .catch((error) => {
@@ -100,42 +131,58 @@ export default {
           this.profileCreationErrors = true;
           if (response.status === 400) {
             this.profileCreationErrorMsg = "Bad Request";
+            this.cancelAddProfile();
           }
         });
-      this.cancelAddProfile();
+
+      //(api call to add profile using newProfile)
+      //this.profiles = (api call for get profiles using user id)
     },
-    selectProfile() {},
+    closeProfile(action) {
+      if (action == 1) {
+        //open the browse page
+      } else if (action == 2) {
+        //(api call to delete profile using profile name and user id)
+        //this.profiles = (api call for get profiles using user id)
+      }
+      this.selectedProfile = "";
+      this.showProfileOptions = false;
+    },
+    selectProfile(clickedProfile) {
+      this.selectedProfile = { ...clickedProfile };
+      this.showProfileOptions = true;
+    },
     cancelAddProfile() {
       this.showAddProfileForm = false;
-      this.profile.profileName = "";
-      this.profile.favoriteGenre = "";
-    },
-    removeProfile(index) {
-      this.profiles.splice(index, 1);
+      this.newProfile.profileName = "";
+      this.newProfile.profileIcon = "";
     },
   },
 };
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Roboto:700,900');
+@import url("https://fonts.googleapis.com/css?family=Roboto:700,900");
+.profile-name {
+  font-weight: bold;
+  font-size: 25px;
+  margin-top: 10px;
+  color: #ccc;
+}
 h1 {
   margin-top: 85px;
   font-size: 60px;
-  color:#ff3131;
-  font-family: 'Roboto';
-  letter-spacing:0px;
-   text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.8),
-               0px 8px 13px rgba(0, 0, 0, 0.4),
-               0px 18px 23px rgba(0, 0, 0, 0.4); 
-
+  color: #ff3131;
+  font-family: "Roboto";
+  letter-spacing: 0px;
+  text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.8), 0px 8px 13px rgba(0, 0, 0, 0.4),
+    0px 18px 23px rgba(0, 0, 0, 0.4);
 }
 button {
   margin-top: 10px;
   margin-right: 5px;
   padding: 5px;
   font-weight: bold;
-  
 }
 * {
   margin: 0;
@@ -157,31 +204,45 @@ body {
 .header {
   text-align: center;
 }
-
+.profileOptions {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .profile-box {
-  width: 120px;
-  height: 120px;
+  border-radius: 100px;
+  width: 200px;
+  height: 200px;
   border: 2px solid #ccc;
-  padding: 20px;
+  padding: 5px;
+  margin-top: 150px;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;
   text-align: center;
   position: relative;
 }
-.addProfileLabels{
+.addProfileLabels {
   font-size: 25px;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   color: white;
 }
 .add-profile-box {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   border: 2px solid #ccc;
   padding: 20px;
   cursor: pointer;
   transition: background-color 0.2s;
   text-align: center;
-  margin: 100px;
+  font-size: 20px;
+  margin-top: 150px;
+  margin-left: 50px;
   position: relative;
 }
 
@@ -202,7 +263,13 @@ body {
   background-color: #ff3131;
   transform: scale(1.05);
 }
-
+.profile-box {
+  background-color: #ccc;
+}
+.icons {
+  width: 100%;
+  height: 100%;
+}
 .add-profile-box:hover {
   background-color: #ff3131;
 }
@@ -217,10 +284,6 @@ body {
   margin-top: 20px;
   max-width: 300px;
   margin: 0 auto;
-  border-radius: 10px;
-  box-shadow: rgba(255, 255, 255, 0.4) 0px 2px 4px, rgba(255, 255, 255, 0.3) 0px 7px 13px -3px, rgba(255, 255, 255, 0.2) 0px -3px 0px inset; 
-  /* alt shadow?
-  box-shadow: rgba(255, 255, 255, 0.4) 5px 5px, rgba(255, 255, 255, 0.3) 10px 10px, rgba(255, 255, 255, 0.2) 15px 15px, rgba(255, 255, 255, 0.1) 20px 20px, rgba(255, 255, 255, 0.05) 25px 25px;*/
 }
 
 .add-profile-form input,

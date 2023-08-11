@@ -23,7 +23,7 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public List<Profile> getProfiles(int userId) {
         List<Profile> profiles = new ArrayList<>();
-        String sql = "SELECT profile_id, user_id, profile_name FROM profile WHERE user_id = ?";
+        String sql = "SELECT profile_id, user_id, profile_name, profile_icon FROM profile WHERE user_id = ?";
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
@@ -91,6 +91,7 @@ public class JdbcProfileDao implements ProfileDao {
         profile.setProfileId(rs.getInt("profile_id"));
         profile.setUserId(rs.getInt("user_id"));
         profile.setProfileName(rs.getString("profile_name"));
+        profile.setProfileIcon(rs.getString("profile_icon"));
         return profile;
     }
 }
