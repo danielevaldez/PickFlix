@@ -4,8 +4,7 @@
       <h1 class="logo">PICKFLIX</h1>
     </header>
     <div class="center-container">
-    <div v-if="stillLoading"><img src="../../img/loading.gif" /></div>
-    <div v-else class = "login-container">
+    <div class = "login-container">
         <form @submit.prevent="login">
           <h1>Login</h1>
           <div role="alert" class="alert" v-if="invalidCredentials">Invalid username and password!</div>
@@ -18,9 +17,7 @@
           </div>
           <button type="submit" class="form-input-group">Sign In</button>
           <p>
-            <router-link :to="{ name: 'register' }"
-              >Need an account? Sign up.</router-link
-            >
+            <router-link :to="{ name: 'register' }" class="registerLink">Need an account? Sign up.</router-link>
           </p>
         </form>
       </div>
@@ -41,13 +38,7 @@ export default {
         password: "",
       },
       invalidCredentials: false,
-      stillLoading: true,
     };
-  },
-  created() {
-    setTimeout(() => {
-      this.stillLoading = false;
-    }, 1000);
   },
   methods: {
     login() {
@@ -55,6 +46,7 @@ export default {
         .login(this.user)
         .then((response) => {
           if (response.status == 200) {
+            this.$store.commit("PLAY_LOGIN_SOUND");
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
             this.$store.commit("SET_USER", response.data.user);
             this.$store.commit("SET_USER_ID", response.data.user.id);
@@ -74,6 +66,12 @@ export default {
 </script>
 
 <style scoped>
+.registerLink {
+  color: rgb(241, 237, 237);
+}
+.registerLink:visited {
+  color: rgb(241, 237, 237);
+}
 .logo {
   color: #e90418;
 }
@@ -84,8 +82,9 @@ header {
   padding: 10px 30px; 
 }
 .alert {
-  font-size: 20px;
-  color: rgb(241, 237, 237);
+  font-size: 15px;
+  color: rgb(195, 51, 51);
+  margin-bottom: 10px;
 }
 p { 
   font-size: 20px;

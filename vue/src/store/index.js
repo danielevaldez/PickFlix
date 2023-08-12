@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import sound from "../../public/profileSelectLoginSound.mp3";
 
 Vue.use(Vuex);
 
@@ -16,6 +17,8 @@ if (currentToken != null) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${currentToken}`;
 }
 
+var loginSound = new Audio(sound);
+
 export default new Vuex.Store({
   state: {
     token: currentToken || "",
@@ -24,6 +27,9 @@ export default new Vuex.Store({
     profiles: [],
   },
   mutations: {
+    PLAY_LOGIN_SOUND(){
+      loginSound.play();
+    },
     SET_PROFILES(state, profiles) {
       state.profiles = profiles;
     },
