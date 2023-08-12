@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,12 +37,9 @@ public class ProfileController {
 
     @RequestMapping(path = "profiles/{userId}", method = RequestMethod.GET)
     public List<Profile> getProfiles(@PathVariable int userId) {
-        List<Profile> profileList = null;
+        List<Profile> profileList = new ArrayList<>();
         try {
             profileList = profileDao.getProfiles(userId);
-            if (profileList.size() < 1) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to get profiles.");
-            }
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Profile creation failed.");
         }
@@ -52,7 +50,7 @@ public class ProfileController {
     @RequestMapping(path = "profiles/{userId}/{profileId}", method = RequestMethod.DELETE)
     public void deleteProfile(@PathVariable int userId, @PathVariable int profileId) {
         try {
-            Boolean deleted = profileDao.deleteProfile(userId, profileId);
+            boolean deleted = profileDao.deleteProfile(userId, profileId);
             if (!deleted) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found or unable to delete.");
             }
