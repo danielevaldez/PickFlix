@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -31,6 +32,30 @@ public class ProfileController {
             }
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Profile creation failed.");
+        }
+    }
+
+    @RequestMapping(path = "profiles/{userId}", method = RequestMethod.GET)
+    public List<Profile> getProfiles(@PathVariable int userId) {
+        List<Profile> profileList = new ArrayList<>();
+        try {
+            profileList = profileDao.getProfiles(userId);
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Profile creation failed.");
+        }
+        return profileList;
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(path = "profiles/{userId}/{profileId}", method = RequestMethod.DELETE)
+    public void deleteProfile(@PathVariable int userId, @PathVariable int profileId) {
+        try {
+            boolean deleted = profileDao.deleteProfile(userId, profileId);
+            if (!deleted) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found or unable to delete.");
+            }
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete profile.");
         }
     }
 }

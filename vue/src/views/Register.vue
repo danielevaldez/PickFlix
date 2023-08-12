@@ -1,53 +1,40 @@
 <template>
   <div class="container">
-    <div v-if="stillLoading">
-      <div class="logoPic"><img id="logo" src="../../img/logo.png" /></div>
-      <img src="../../img/loading.gif" class="loading" />
-    </div>
-    <div v-else>
-      <div class="logoPic"><img id="logo" src="../../img/logo.png" /></div>
-      <br />
-      <br />
-      <div id="register" class="text-center">
+    <header>
+      <h1 class="logo">PICKFLIX</h1>
+    </header>
+    <div class="center-container">
+      <div v-if="stillLoading"><img src="../../img/loading.gif" /></div>
+      <div v-else class="register-container">
         <form @submit.prevent="register">
           <h1>Create Account</h1>
-          <br />
           <div role="alert" v-if="registrationErrors">
             {{ registrationErrorMsg }}
           </div>
           <div class="form-input-group">
-            <label for="username">Username</label>
             <input
               type="text"
               id="username"
               v-model="user.username"
               required
-              autofocus
+              placeholder="Username"
             />
           </div>
           <div class="form-input-group">
-            <label for="password">Password</label>
             <input
               type="password"
               id="password"
               v-model="user.password"
               required
+              placeholder="Password"
             />
           </div>
           <div class="form-input-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              v-model="user.confirmPassword"
-              required
-            />
+            <input type="password" v-model="user.confirmPassword" required placeholder="Confirm Password"/>
           </div>
           <button type="submit">Create Account</button>
           <p>
-            <router-link :to="{ name: 'login' }"
-              >Already have an account? Log in.</router-link
-            >
+            <router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link>
           </p>
         </form>
       </div>
@@ -112,51 +99,60 @@ export default {
 </script>
 
 <style scoped>
-.form-input-group {
-  margin-bottom: 1rem;
+.logo {
+  color: #e90418;
 }
-label {
-  margin-right: 0.5rem;
-  font-weight: bold;
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 30px; 
+}
+p { 
   font-size: 20px;
 }
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: top;
-  min-height: 100vh;
-  background-color: #b32222;
-  background-image: url("../../img/spotlights.png");
-  background-position: center top;
-  background-repeat: no-repeat;
+button {
+    margin-top: 3px;
+    background-color: #e90418;
+    color: rgb(241, 237, 237);
+    font-size: 25px;
+    font-weight: bold;
+    height: 40px;
+    width: 259px;
 }
-#register {
-  border-style: solid;
-  border-width: 2px;
-  padding: 30px;
-  font-family: "Franklin Gothic Medium";
-  background-color: #ffffff;
-  border-radius: 75px;
-  font-size: 15px;
-  color: black;
+input {
+  margin-top: 3px;
+  height: 30px;
+  width: 250px;
+  font-size: 20px;
 }
 h1 {
-  font-size: 30px;
+    font-size: 40px;
+    color: rgb(241, 237, 237);
+}
+.container {
+  font-family: "Franklin Gothic Medium";
+   background-image: url("../../img/login-register-back.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
-  justify-content: center;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: flex-start; 
+  height: 100vh;
+  width: 100%;
 }
-#logo {
-  margin-top: 100px;
+.center-container {
   display: flex;
-  align-items: top;
-  justify-content: center;
+  align-items: center; 
+  justify-content: center; 
+  flex-grow: 1; 
 }
-.logoPic {
-  display: flex;
-  justify-content: center;
+.register-container {
+  background-color: rgba(0, 0, 0, 0.774);
+  border-radius: 10px;
+  padding: 30px;
 }
-button {
-  font-size: 15px;
-  background-color: #bfd7ff;
-}
+
 </style>

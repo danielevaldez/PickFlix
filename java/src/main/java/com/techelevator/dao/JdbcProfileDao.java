@@ -21,12 +21,12 @@ public class JdbcProfileDao implements ProfileDao {
     }
 
     @Override
-    public List<Profile> getProfiles() {
+    public List<Profile> getProfiles(int userId) {
         List<Profile> profiles = new ArrayList<>();
-        String sql = "SELECT profile_id, user_id, profile_name FROM profile";
+        String sql = "SELECT profile_id, user_id, profile_name, profile_icon FROM profile WHERE user_id = ?;";
 
         try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
             while (results.next()) {
                 Profile profile = mapRowToProfile(results);
                 profiles.add(profile);
@@ -40,7 +40,7 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public Profile getProfileById(int id) {
         Profile profile = null;
-        String sql = "SELECT profile_id, user_id, profile_name FROM profile WHERE profile_id = ?";
+        String sql = "SELECT profile_id, user_id, profile_name, profile_icon FROM profile WHERE profile_id = ?;";
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
@@ -56,7 +56,7 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public List<Profile> getProfilesByUserId(int id) {
         List<Profile> profiles = new ArrayList<>();
-        String sql = "SELECT profile_id, user_id, profile_name FROM profile WHERE user_id = ?";
+        String sql = "SELECT profile_id, user_id, profile_name, profile_icon FROM profile WHERE user_id = ?;";
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
@@ -73,10 +73,10 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public Profile createProfile(CreateProfileDto profile) {
         Profile newProfile = null;
-        String insertProfileSql = "INSERT INTO profile (user_id, profile_name) values (?, ?) RETURNING profile_id";
+        String insertProfileSql = "INSERT INTO profile (user_id, profile_name, profile_icon) values (?, ?, ?) RETURNING profile_id;";
 
         try {
-            int newProfileId = jdbcTemplate.queryForObject(insertProfileSql, int.class, profile.getUserId(), profile.getProfileName());
+            int newProfileId = jdbcTemplate.queryForObject(insertProfileSql, int.class, profile.getUserId(), profile.getProfileName(), profile.getProfileIcon());
             newProfile = getProfileById(newProfileId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -86,11 +86,23 @@ public class JdbcProfileDao implements ProfileDao {
         return newProfile;
     }
 
+    @Override
+    public boolean deleteProfile(int userId, int profileId) {
+        String deleteProfileSql = "DELETE FROM profile WHERE user_id = ? AND profile_id = ?;";
+        try {
+            int rowsAffected = jdbcTemplate.update(deleteProfileSql, userId, profileId);
+            return rowsAffected > 0;
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+    }
+
     private Profile mapRowToProfile(SqlRowSet rs) {
         Profile profile = new Profile();
         profile.setProfileId(rs.getInt("profile_id"));
         profile.setUserId(rs.getInt("user_id"));
         profile.setProfileName(rs.getString("profile_name"));
+        profile.setProfileIcon(rs.getString("profile_icon"));
         return profile;
     }
 }

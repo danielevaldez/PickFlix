@@ -6,10 +6,10 @@ import com.techelevator.model.Profile;
 import java.util.List;
 
 public interface ProfileDao {
-    List<Profile> getProfiles();
+    List<Profile> getProfiles(int userId);
     Profile getProfileById(int id);
     List<Profile> getProfilesByUserId(int id);
     Profile createProfile(CreateProfileDto profile);
-    //deleteProfile
+    boolean deleteProfile(int userId, int profileId);
     //updateProfile
 }

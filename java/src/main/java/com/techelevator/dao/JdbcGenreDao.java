@@ -3,6 +3,7 @@ package com.techelevator.dao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Genre;
 import com.techelevator.model.Profile;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -68,6 +69,22 @@ public class JdbcGenreDao implements GenreDao {
             throw new DaoException("Unable to connect to server or database", e);
         }
         return genre;
+    }
+
+    @Override
+    public Genre addFavoriteGenre(int profileId, int genreId) {
+        Genre genreReturned = null;
+        String sql = "INSERT INTO profile_genre VALUES (?, ?) RETURNING genre_id";
+
+        try {
+            int genreIdOfFavoritedGenre = jdbcTemplate.queryForObject(sql, int.class, profileId, genreId);
+            genreReturned = getGenreById(genreIdOfFavoritedGenre);
+        }  catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return genreReturned;
     }
 
     private Genre mapRowToGenre(SqlRowSet rs) {

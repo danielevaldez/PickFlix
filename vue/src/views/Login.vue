@@ -1,45 +1,22 @@
 <template>
   <div class="container">
-    <div v-if="stillLoading">
-      <img id="logo" src="../../img/logo.png" />
-      <img src="../../img/loading.gif" class="loading" />
-    </div>
-    <div v-else>
-      <img id="logo" src="../../img/logo.png" />
-      <br />
-      <br />
-      <div id="login">
+    <header>
+      <h1 class="logo">PICKFLIX</h1>
+    </header>
+    <div class="center-container">
+    <div v-if="stillLoading"><img src="../../img/loading.gif" /></div>
+    <div v-else class = "login-container">
         <form @submit.prevent="login">
           <h1>Login</h1>
-          <br />
-          <div role="alert" v-if="invalidCredentials">
-            Invalid username and password!
-          </div>
-          <div role="alert" v-if="this.$route.query.registration">
-            Thank you for registering, please sign in.
+          <div role="alert" class="alert" v-if="invalidCredentials">Invalid username and password!</div>
+          <div role="alert" class="alert" v-if="this.$route.query.registration">Thank you for registering, please sign in.</div>
+          <div class="form-input-group">
+            <input type="text" id="username" v-model="user.username" required placeholder="Username"/>
           </div>
           <div class="form-input-group">
-            <label for="username">Username</label>
-            <br />
-            <input
-              type="text"
-              id="username"
-              v-model="user.username"
-              required
-              autofocus
-            />
+            <input type="password" id="password" v-model="user.password" required placeholder="Password"/>
           </div>
-          <div class="form-input-group">
-            <label for="password">Password</label>
-            <br />
-            <input
-              type="password"
-              id="password"
-              v-model="user.password"
-              required
-            />
-          </div>
-          <button type="submit">Sign in</button>
+          <button type="submit" class="form-input-group">Sign In</button>
           <p>
             <router-link :to="{ name: 'register' }"
               >Need an account? Sign up.</router-link
@@ -48,7 +25,7 @@
         </form>
       </div>
     </div>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -97,51 +74,64 @@ export default {
 </script>
 
 <style scoped>
-#logo {
-  margin-top: 100px;
-  display: flex;
-  align-items: top;
-  justify-content: center;
+.logo {
+  color: #e90418;
 }
-.form-input-group {
-  margin-bottom: 1rem;
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 30px; 
 }
-label {
-  margin-right: 0.5rem;
+.alert {
+  font-size: 20px;
+  color: rgb(241, 237, 237);
 }
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: top;
-  min-height: 100vh;
-  background-color: #b32222;
-  background-image: url("../../img/spotlights.png");
-  background-position: center top;
-  background-repeat: no-repeat;
-}
-#login {
-  justify-content: center;
-  align-items: center;
-  border-style: solid;
-  border-width: 2px;
-  padding: 30px;
-  font-family: "Franklin Gothic Medium";
-  background-color: #ffffff;
-  border-radius: 75px;
-  font-size: 15px;
-  color: black;
-}
-h1 {
-  font-size: 30px;
-  display: flex;
-  justify-content: center;
-}
-label {
-  font-weight: bold;
+p { 
   font-size: 20px;
 }
 button {
-  font-size: 15px;
-  background-color: #bfd7ff;
+    margin-top: 3px;
+    height: 40px;
+    width: 259px;
+    background-color: #e90418;
+    color: rgb(241, 237, 237);
+    font-size: 25px;
+    font-weight: bold;
 }
+input {
+    margin-top: 3px;
+    height: 30px;
+    width: 250px;
+    font-size: 20px;
+}
+h1 {
+    font-size: 40px;
+    color: rgb(241, 237, 237);
+}
+.container {
+  font-family: "Franklin Gothic Medium";
+  background-image: url("../../img/login-register-back.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: flex-start; 
+  height: 100vh;
+  width: 100%;
+}
+.center-container {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  flex-grow: 1; 
+}
+.login-container {
+  background-color: rgba(0, 0, 0, 0.774);
+  border-radius: 10px;
+  padding: 30px;
+}
+
 </style>

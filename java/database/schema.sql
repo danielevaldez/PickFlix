@@ -14,6 +14,7 @@ CREATE TABLE profile (
 	profile_id SERIAL PRIMARY KEY,
 	user_id int NOT NULL,
 	profile_name varchar(50) NOT NULL,
+	profile_icon varchar(50) NOT NULL,
 	CONSTRAINT FK_profile_users FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
