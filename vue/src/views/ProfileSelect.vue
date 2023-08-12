@@ -1,15 +1,8 @@
 <template>
-  <div>
-    <header>
-      <div class="txt" contenteditable="true">
-        PICKFLIX
-    </div>
-    </header>
-    <div class="select-profile-header" v-if="!showProfileOptions">
-      <h1 class="header-text">Select a Profile</h1>
+  <div class="container">
+    <header><div class="txt" contenteditable="true">PICKFLIX</div></header>
       <div role="alert" v-if="profileCreationErrors">
         {{ profileCreationErrorMsg }}
-      </div>
     </div>
     <div v-if="showProfileOptions" class="profileOptions">
       <profile-options
@@ -58,7 +51,7 @@
           class="addProfileInputs"
         />
         <label for="Genre" id="Dropdown" class="addProfileLabels"
-          >Favorite Genre</label
+          >Profile Icon</label
         >
         <br />
         <select
@@ -170,41 +163,34 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css?family=Roboto:700,900");
+
+.container {
+  font-family: "Franklin Gothic Medium";
+  background-image: url("../../img/browsebg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: flex-start; 
+  height: 100vh;
+  width: 100%;
+}
 .profile-name {
   font-weight: bold;
   font-size: 25px;
   margin-top: 10px;
   color: #ccc;
 }
-h1 {
-  margin-top: 85px;
-  font-size: 60px;
-  color: #ff3131;
-  font-family: "Roboto";
-  letter-spacing: 0px;
-  text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.8), 0px 8px 13px rgba(0, 0, 0, 0.4),
-    0px 18px 23px rgba(0, 0, 0, 0.4);
-}
+
 button {
   margin-top: 10px;
   margin-right: 5px;
   padding: 5px;
   font-weight: bold;
 }
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-body {
-  background-image: url("C:\Users\Student\workspace\java-red-finalcapstone-team0\vue\img\browsebg.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: white;
-  font-family: Arial, sans-serif;
-}
+
 .addProfileInputs {
   width: 200px;
   font-size: 20px;
@@ -330,80 +316,42 @@ body {
 .remove-profile-button:hover {
   background-color: #ff0000;
 }
-nav {
-  width: 100%;
-  height: 60px;
-  position: fixed;
-  top: 0;
-  z-index: 9;
-  background: #000;
-  padding: 0 2.5vw;
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  height: auto;
-  width: 150px;
-  padding-top: 10px;
-}
-
-.join-box {
-  width: fit-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: auto;
-  margin-left: auto;
-}
-
-.join-msg {
-  color: #fff;
-  font-family: Arial;
-}
-
-.btn {
-  border: 1px solid #fff;
-  border-radius: 2px;
-  background: none;
-  color: #fff;
-  height: 35px;
-  padding: 0 10px;
-  margin-left: 10px;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.join-btn {
-  background: #dd0e15;
-  border-color: #dd0e15;
-  font-family: Arial;
-}
 .select-profile-header {
   text-align: center;
   padding: 20px;
   color: white;
 }
 
+.txt {
+  color: #e90418;
+  text-align: center;
+  font-size: 12vmin;
+  font-weight: 700;
+  outline: none;
+  white-space: nowrap;
+  text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.8), 0px 8px 13px rgba(0, 0, 0, 0.4),
+    0px 18px 23px rgba(0, 0, 0, 0.4);
+}
+/* STYLING FOR LOGO ANIMATION */
 @import url("https://fonts.googleapis.com/css?family=Roboto:700,900");
 body {
   background: radial-gradient(#fff, #aaa);
   background-size: 100vw 100vh;
   overflow: hidden;
   padding-top: 40vh;
+  margin: 0;
 }
-
 .txt {
   color: #e90418;
   text-align: center;
-  font-family: "Roboto";
   font-size: 12vmin;
   font-weight: 700;
   animation: netflix_style 4s 1;
   outline: none;
   white-space: nowrap;
+  text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.8), 0px 8px 13px rgba(0, 0, 0, 0.4),
+    0px 18px 23px rgba(0, 0, 0, 0.4);
 }
-
 @keyframes netflix_style {
   0% {
     text-shadow: 0px 0px transparent, 1px 1px #aaa, 2px 2px #aaa, 3px 3px #aaa, 4px 4px #aaa, 5px 5px #aaa, 6px 6px #aaa, 7px 7px #aaa, 8px 8px #aaa, 9px 9px #aaa, 10px 10px #aaa, 11px 11px #aaa, 12px 12px #aaa, 13px 13px #aaa, 14px 14px #aaa, 15px 15px #aaa, 16px 16px #aaa, 17px 17px #aaa, 18px 18px #aaa, 19px 19px #aaa, 20px 20px #aaa, 21px 21px #aaa, 22px 22px #aaa, 23px 23px #aaa, 24px 24px #aaa, 25px 25px #aaa, 26px 26px #aaa, 27px 27px #aaa, 28px 28px #aaa, 29px 29px #aaa, 30px 30px #aaa, 31px 31px #aaa, 32px 32px #aaa, 33px 33px #aaa, 34px 34px #aaa, 35px 35px #aaa, 36px 36px #aaa, 37px 37px #aaa, 38px 38px #aaa, 39px 39px #aaa, 40px 40px #aaa, 41px 41px #aaa, 42px 42px #aaa, 43px 43px #aaa, 44px 44px #aaa, 45px 45px #aaa, 46px 46px #aaa, 47px 47px #aaa, 48px 48px #aaa, 49px 49px #aaa, 50px 50px #aaa, 51px 51px #aaa, 52px 52px #aaa, 53px 53px #aaa, 54px 54px #aaa, 55px 55px #aaa, 56px 56px #aaa, 57px 57px #aaa, 58px 58px #aaa, 59px 59px #aaa, 60px 60px #aaa, 61px 61px #aaa, 62px 62px #aaa, 63px 63px #aaa, 64px 64px #aaa, 65px 65px #aaa, 66px 66px #aaa, 67px 67px #aaa, 68px 68px #aaa, 69px 69px #aaa, 70px 70px #aaa, 71px 71px #aaa, 72px 72px #aaa, 73px 73px #aaa, 74px 74px #aaa, 75px 75px #aaa, 76px 76px #aaa, 77px 77px #aaa, 78px 78px #aaa, 79px 79px #aaa, 80px 80px #aaa, 81px 81px #aaa, 82px 82px #aaa, 83px 83px #aaa, 84px 84px #aaa, 85px 85px #aaa, 86px 86px #aaa, 87px 87px #aaa, 88px 88px #aaa, 89px 89px #aaa, 90px 90px #aaa, 91px 91px #aaa, 92px 92px #aaa, 93px 93px #aaa, 94px 94px #aaa, 95px 95px #aaa, 96px 96px #aaa, 97px 97px #aaa, 98px 98px #aaa, 99px 99px #aaa, 100px 100px #aaa;
@@ -432,12 +380,9 @@ body {
     transform: scale(0.85, 0.9);
   }
   100% {
-    opacity: 1; /* Keep opacity at 1 */
-    color: #e90418; /* Maintain the color after animation */
-    transform: scale(1, 1); /* Return to normal scale */
+    opacity: 1;
+    color: #e90418;
+    transform: scale(1, 1); 
   }
-}
-header {
-  background-color: black;
 }
 </style>
