@@ -2,14 +2,9 @@
   <div class="container">
     <header><div class="txt" contenteditable="true">PICKFLIX</div></header>
     <div v-if="!stillLoading">
-    <div role="alert" v-if="profileCreationErrors">
-      {{ profileCreationErrorMsg }}
-    </div>
+    <div role="alert" v-if="profileCreationErrors">{{ profileCreationErrorMsg }}</div>
     <div v-if="showProfileOptions" class="profileOptions">
-      <profile-options
-        :profile="selectedProfile"
-        @close="closeProfile"
-      ></profile-options>
+      <profile-options :profile="selectedProfile" @close="closeProfile"></profile-options>
     </div>
     <ul class="profile-list" v-if="!showProfileOptions">
       <li
@@ -102,7 +97,7 @@ export default {
     this.getProfiles();
     setTimeout(() => {
         this.stillLoading = false;
-      }, 4000);
+      },5500);
   },
   methods: {
     getProfiles() {
@@ -173,10 +168,7 @@ export default {
 <style scoped>
 .container {
   font-family: "Franklin Gothic Medium";
-  background-image: url("../../img/browsebg.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: #141414;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -336,8 +328,7 @@ button {
   font-weight: 700;
   outline: none;
   white-space: nowrap;
-  text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.8), 0px 8px 13px rgba(0, 0, 0, 0.4),
-    0px 18px 23px rgba(0, 0, 0, 0.4);
+  text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.8), 0px 10px 15px rgba(0, 0, 0, 0.4), 0px 20px 30px rgba(0, 0, 0, 0.4);
   margin-top: 20px;
 }
 /* STYLING FOR LOGO ANIMATION */
@@ -354,7 +345,7 @@ body {
   text-align: center;
   font-size: 12vmin;
   font-weight: 700;
-  animation: netflix_style 4s 1;
+  animation: netflix_style 6s 1;
   outline: none;
   white-space: nowrap;
   text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.8), 0px 8px 13px rgba(0, 0, 0, 0.4),
