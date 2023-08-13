@@ -1,14 +1,10 @@
 <template>
   <div class="container">
     <header><div class="txt" contenteditable="true">PICKFLIX</div></header>
-    <div role="alert" v-if="profileCreationErrors">
-      {{ profileCreationErrorMsg }}
-    </div>
+    <div v-if="!stillLoading">
+    <div role="alert" v-if="profileCreationErrors">{{ profileCreationErrorMsg }}</div>
     <div v-if="showProfileOptions" class="profileOptions">
-      <profile-options
-        :profile="selectedProfile"
-        @close="closeProfile"
-      ></profile-options>
+      <profile-options :profile="selectedProfile" @close="closeProfile"></profile-options>
     </div>
     <ul class="profile-list" v-if="!showProfileOptions">
       <li
@@ -70,6 +66,7 @@
         <button @click="cancelAddProfile">Cancel</button>
       </form>
     </div>
+    </div>
   </div>
 </template>
 
@@ -93,10 +90,14 @@ export default {
       showAddProfileForm: false,
       showProfileOptions: false,
       selectedProfile: "",
+      stillLoading: true,
     };
   },
   created() {
     this.getProfiles();
+    setTimeout(() => {
+        this.stillLoading = false;
+      },5500);
   },
   methods: {
     getProfiles() {
@@ -167,10 +168,7 @@ export default {
 <style scoped>
 .container {
   font-family: "Franklin Gothic Medium";
-  background-image: url("../../img/browsebg.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: #141414;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -330,8 +328,8 @@ button {
   font-weight: 700;
   outline: none;
   white-space: nowrap;
-  text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.8), 0px 8px 13px rgba(0, 0, 0, 0.4),
-    0px 18px 23px rgba(0, 0, 0, 0.4);
+  text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.8), 0px 10px 15px rgba(0, 0, 0, 0.4), 0px 20px 30px rgba(0, 0, 0, 0.4);
+  margin-top: 20px;
 }
 /* STYLING FOR LOGO ANIMATION */
 @import url("https://fonts.googleapis.com/css?family=Roboto:700,900");
@@ -347,7 +345,7 @@ body {
   text-align: center;
   font-size: 12vmin;
   font-weight: 700;
-  animation: netflix_style 4s 1;
+  animation: netflix_style 6s 1;
   outline: none;
   white-space: nowrap;
   text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.8), 0px 8px 13px rgba(0, 0, 0, 0.4),
@@ -381,7 +379,8 @@ body {
       93px 93px #aaa, 94px 94px #aaa, 95px 95px #aaa, 96px 96px #aaa,
       97px 97px #aaa, 98px 98px #aaa, 99px 99px #aaa, 100px 100px #aaa;
     color: #f3f3f3;
-    transform: scale(1.5, 1.5);
+    transform: scale(4, 4);
+    margin-top: 300px;
   }
   10% {
     text-shadow: 0px 0px transparent, 1px 1.5px #aaa, 2px 3px #aaa,
@@ -411,7 +410,7 @@ body {
       95px 142.5px #aaa, 96px 144px #aaa, 97px 145.5px #aaa, 98px 147px #aaa,
       99px 148.5px #aaa, 100px 150px #aaa;
     color: #f3f3f3;
-    transform: scale(1.5, 1.5);
+    transform: scale(3, 3);
   }
   15% {
     color: #f3f3f3;
@@ -419,7 +418,7 @@ body {
   20% {
     color: #e90418;
     text-shadow: none;
-    transform: scale(1.1, 1.1);
+    transform: scale(2.5, 2.5);
   }
   75% {
     opacity: 1;
@@ -427,7 +426,7 @@ body {
   80% {
     opacity: 0;
     color: #e90418;
-    transform: scale(0.85, 0.9);
+    transform: scale(1.5, 1.5);
   }
   100% {
     opacity: 1;

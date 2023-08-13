@@ -8,9 +8,7 @@
       <div v-else class="register-container">
         <form @submit.prevent="register">
           <h1>Create Account</h1>
-          <div role="alert" v-if="registrationErrors">
-            {{ registrationErrorMsg }}
-          </div>
+          <div role="alert" class="alert" v-if="registrationErrors">{{ registrationErrorMsg }}</div>
           <div class="form-input-group">
             <input
               type="text"
@@ -34,7 +32,7 @@
           </div>
           <button type="submit">Create Account</button>
           <p>
-            <router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link>
+            <router-link :to="{ name: 'login' }" class="loginLink">Already have an account? Log in.</router-link>
           </p>
         </form>
       </div>
@@ -55,17 +53,27 @@ export default {
         confirmPassword: "",
         role: "user",
       },
-      stillLoading: true,
+      stillLoading: "",
       registrationErrors: false,
       registrationErrorMsg: "There were problems registering this user.",
     };
   },
   created() {
+    this.playLoadingGif();
+  },
+  beforeRouteLeave(to, from, next) {
+    this.playLoadingGif();
     setTimeout(() => {
-      this.stillLoading = false;
+      next();
     }, 1000);
   },
   methods: {
+    playLoadingGif(){
+      this.stillLoading = true;
+      setTimeout(() => {
+        this.stillLoading = false;
+      }, 1000);
+    },
     register() {
       if (this.user.password != this.user.confirmPassword) {
         this.registrationErrors = true;
@@ -99,6 +107,17 @@ export default {
 </script>
 
 <style scoped>
+.loginLink {
+  color: rgb(241, 237, 237);
+}
+.loginLink:visited {
+  color: rgb(241, 237, 237);
+}
+.alert {
+  font-size: 15px;
+  color: rgb(195, 51, 51);
+  margin-bottom: 10px;
+}
 .logo {
   color: #e90418;
 }
