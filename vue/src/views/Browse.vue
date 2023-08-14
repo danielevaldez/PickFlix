@@ -1,9 +1,10 @@
 <template>
+<body>
   <div>
     <header>
       <nav>
-        <router-link to="/browse"> <!-- Add router-link around the image -->
-          <img src="..\img\123123.png" class="logo" alt="Logo"> <!-- Use relative path for the image source -->
+        <router-link to="/browse">
+          <img src="../../img/123123.png" class="logo" alt="Logo">
         </router-link>
         <div class="join-box">
           <button class="btn logout-btn" @click="logout">LOG OUT</button>
@@ -11,17 +12,25 @@
       </nav>
     </header>
     <main>
-      <!-- Top 5 recommended movies -->
+      <!-- Top 5 recommended movies section -->
       <section class="recommended-movies">
         <h2 class="recommendation-text">Top 5 picks for {{ selectedProfile }}</h2>
+        <!-- Container for recommended movie posters -->
         <div class="movie-containers">
-          <div v-for="movie in recommendedMovies" :key="movie.id" class="movie-container" @click="showMovieDetails(movie)">
-            <img :src="movie.poster" alt="Movie Poster" class="movie-poster">
+          <!-- Loop through recommendedMovies and display movie images -->
+          <div
+            v-for="recommendedMovie in recommendedMovies"
+            :key="recommendedMovie.id"
+            class="movie-container"
+            @click="showMovieDetails(recommendedMovie)"
+          >
+            <img :src="recommendedMovie.poster" alt="Movie Poster" class="movie-poster">
           </div>
         </div>
       </section>
     </main>
   </div>
+</body>
 </template>
 
 <script>
@@ -29,26 +38,38 @@ export default {
   name: 'Browse',
   data() {
     return {
+      // profile information
       selectedProfile: 'Profile 1',
+      // array storing recommended movies
       recommendedMovies: [],
+      // array containing movie data
       movies: [
-        // ... Movie data ...
+      
       ],
     };
   },
   methods: {
+    // gets recommended movies for selected profile
     async fetchRecommendedMoviesForProfile() {
-    
+      try {
+        const profileId = 1; // Replace with the actual profile ID
+        // gets recommended movies from the server
+        const response = await fetch(`/movies/browse/${profileId}`);
+        const data = await response.json();
+        // stores movies in the recommendedMovies array
+        this.recommendedMovies = data;
+      } catch (error) {
+        console.error('Error fetching recommended movies:', error);
+      }
     },
+    // function to clear authentication state and redirects to login
     logout() {
-      this.$store.commit("LOGOUT"); // Clears authentication state
-      this.$router.push("/login"); // Redirects to login page
+      this.$store.commit('LOGOUT');
+      this.$router.push('/login');
     },
-  },
-  mounted() {
-    this.fetchRecommendedMoviesForProfile();
   },
 };
+
 </script>
 
 <style scoped>
@@ -59,12 +80,14 @@ export default {
   }
 
   body {
-    background-image:url("C:\Users\Student\workspace\java-red-finalcapstone-team0\vue\img\browsebg.png");
+    background-image:url("C:\Users\Student\workspace\java-red-finalcapstone-team0\vue\src\views\browsebg.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
     font-family: Arial, sans-serif;
-    color: white;
+    width: 100%;
+    height: 100vh;
+
   }
   
   nav {
