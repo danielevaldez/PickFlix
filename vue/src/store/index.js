@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import sound from "../../public/profileSelectLoginSound.mp3";
+import sound from "../../public/icq2.mp3";
 
 Vue.use(Vuex);
 
@@ -25,6 +25,7 @@ export default new Vuex.Store({
     user: currentUser || {},
     userId: '',
     profiles: [],
+    profileId: '',
   },
   mutations: {
     PLAY_LOGIN_SOUND(){
@@ -44,6 +45,9 @@ export default new Vuex.Store({
     },
     SET_USER_ID(state, user_id) {
       state.userId = user_id;
+    },
+    SET_PROFILE_ID(state, profile_id){
+      state.profileId = profile_id;
     },
     LOGOUT(state) {
       localStorage.removeItem("token");
