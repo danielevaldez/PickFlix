@@ -23,12 +23,13 @@ export default new Vuex.Store({
   state: {
     token: currentToken || "",
     user: currentUser || {},
-    userId: '',
+    userId: "",
     profiles: [],
-    profileId: '',
+    profileId: "",
+    profileName: "",
   },
   mutations: {
-    PLAY_LOGIN_SOUND(){
+    PLAY_LOGIN_SOUND() {
       loginSound.play();
     },
     SET_PROFILES(state, profiles) {
@@ -46,8 +47,11 @@ export default new Vuex.Store({
     SET_USER_ID(state, user_id) {
       state.userId = user_id;
     },
-    SET_PROFILE_ID(state, profile_id){
+    SET_PROFILE_ID(state, profile_id) {
       state.profileId = profile_id;
+    },
+    SET_PROFILE_NAME(state, profile_name) {
+      state.profileName = profile_name;
     },
     LOGOUT(state) {
       localStorage.removeItem("token");

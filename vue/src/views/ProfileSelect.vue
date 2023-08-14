@@ -3,72 +3,91 @@
     <header><div class="txt" contenteditable="true">PICKFLIX</div></header>
     <div v-if="!stillLoading">
       <h1 id="watching">Who's watching?</h1>
-    <div role="alert" v-if="profileCreationErrors">{{ profileCreationErrorMsg }}</div>
-    <ul class="profile-list" v-if="!showProfileOptions">
-      <li
-        class="profile-item"
-        v-for="profile in this.$store.state.profiles"
-        :key="profile.ID"
-        @click="selectProfile(profile)"
-      >
-        <div class="editDeleteButtons" v-if="showEditDelete">
+      <div role="alert" v-if="profileCreationErrors">
+        {{ profileCreationErrorMsg }}
+      </div>
+      <ul class="profile-list" v-if="!showProfileOptions">
+        <li
+          class="profile-item"
+          v-for="profile in this.$store.state.profiles"
+          :key="profile.ID"
+          @click="selectProfile(profile)"
+        >
+          <div class="editDeleteButtons" v-if="showEditDelete">
             <img src="../../img/editIcon.png" />
-            <img src="../../img/deleteIcon.png" @click="deleteProfile(profile)"/>
+            <img
+              src="../../img/deleteIcon.png"
+              @click="deleteProfile(profile)"
+            />
           </div>
-        <div class="profile-box" :class="{ 'shake-animation': showEditDelete }">
-          <div v-if="profile.profileIcon == 'Horror'">
-            <img src="../../img/profileicons/horror.png" class="icons" />
+          <div
+            class="profile-box"
+            :class="{ 'shake-animation': showEditDelete }"
+          >
+            <div v-if="profile.profileIcon == 'Horror'">
+              <img src="../../img/profileicons/horror.png" class="icons" />
+            </div>
+            <div v-if="profile.profileIcon == 'Comedy'">
+              <img src="../../img/profileicons/comedy.png" class="icons" />
+            </div>
+            <div v-if="profile.profileIcon == 'Action'">
+              <img src="../../img/profileicons/action.png" class="icons" />
+            </div>
+            <div v-if="profile.profileIcon == 'Fantasy'">
+              <img src="../../img/profileicons/wizard.png" class="icons" />
+            </div>
+            <div v-if="profile.profileIcon == 'Sci-Fi'">
+              <img src="../../img/profileicons/ufo.png" class="icons" />
+            </div>
+            <div class="profile-name">{{ profile.profileName }}</div>
           </div>
-          <div v-if="profile.profileIcon == 'Comedy'">
-            <img src="../../img/profileicons/comedy.png" class="icons" />
-          </div>
-          <div v-if="profile.profileIcon == 'Action'">
-            <img src="../../img/profileicons/action.png" class="icons" />
-          </div>
-          <div v-if="profile.profileIcon == 'Fantasy'">
-            <img src="../../img/profileicons/wizard.png" class="icons" />
-          </div>
-          <div v-if="profile.profileIcon == 'Sci-Fi'">
-            <img src="../../img/profileicons/ufo.png" class="icons" />
-          </div>
-          <div class="profile-name">{{ profile.profileName }}</div>
-        </div>
-      </li>
-      <li class="add-profile-box" v-if="!showProfileOptions && !showEditDelete" @click="showAddProfileForm = true"><img id="plus-sign" src="../../img/plus.png" /></li>
-    </ul>
-    <div v-if="showAddProfileForm" class="modal-backdrop">
+        </li>
+        <li
+          class="add-profile-box"
+          v-if="!showProfileOptions && !showEditDelete"
+          @click="showAddProfileForm = true"
+        >
+          <img id="plus-sign" src="../../img/plus.png" />
+        </li>
+      </ul>
+      <div v-if="showAddProfileForm" class="modal-backdrop">
         <div class="add-profile-modal">
-              <h1>New Profile</h1>
-      <form @submit.prevent="addProfile()">
-        <input
-          v-model="newProfile.profileName"
-          name="name"
-          class="addProfileInputs"
-          placeholder="Profile Name"
-        />
-        >
-        <br />
-        <select
-          name="Genre"
-          v-model="newProfile.profileIcon"
-          class="addProfileInputs"
-        >
-        <option value="" disabled selected hidden>Favorite Genre</option>
-          <option value="Comedy">Comedy</option>
-          <option value="Sci-Fi">Sci-Fi</option>
-          <option value="Action">Action</option>
-          <option value="Fantasy">Fantasy</option>
-          <option value="Horror">Horror</option>
-        </select>
-        <div class="button-container">
-            <button type="submit">Save Profile</button>
-            <button @click="cancelAddProfile">Cancel</button>
+          <h1>New Profile</h1>
+          <form @submit.prevent="addProfile()">
+            <input
+              v-model="newProfile.profileName"
+              name="name"
+              class="addProfileInputs"
+              placeholder="Profile Name"
+            />
+            >
+            <br />
+            <select
+              name="Genre"
+              v-model="newProfile.profileIcon"
+              class="addProfileInputs"
+            >
+              <option value="" disabled selected hidden>Favorite Genre</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Action">Action</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Horror">Horror</option>
+            </select>
+            <div class="button-container">
+              <button type="submit">Save Profile</button>
+              <button @click="cancelAddProfile">Cancel</button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
+      <div class="manage-profiles" v-if="!showEditDelete">
+        <button @click="showEditDelete = true">Manage Profiles</button>
+      </div>
     </div>
+    <div class="manage-profiles" v-if="showEditDelete">
+      <button @click="showEditDelete = false">Close</button>
     </div>
-    <div class="manage-profiles" v-if="!showEditDelete"><button @click="showEditDelete = true">Manage Profiles</button></div></div>
-    <div class="manage-profiles" v-if="showEditDelete"><button @click="showEditDelete = false">Close</button></div>
   </div>
 </template>
 
@@ -97,8 +116,8 @@ export default {
   created() {
     this.getProfiles();
     setTimeout(() => {
-        this.stillLoading = false;
-      },5500);
+      this.stillLoading = false;
+    }, 5500);
   },
   methods: {
     getProfiles() {
@@ -132,8 +151,8 @@ export default {
           }
         });
     },
-    deleteProfile(){
-      if(confirm("Are you sure you want to delete this profile?")){
+    deleteProfile() {
+      if (confirm("Are you sure you want to delete this profile?")) {
         profileService
           .deleteProfile(
             this.selectedProfile.userId,
@@ -151,6 +170,7 @@ export default {
     },
     selectProfile(clickedProfile) {
       this.$store.commit("SET_PROFILE_ID", clickedProfile.profileId);
+      this.$store.commit("SET_PROFILE_NAME", clickedProfile.profileName);
       this.$router.push("/browse");
     },
     cancelAddProfile() {
@@ -167,7 +187,7 @@ export default {
   font-size: 50px;
   margin-top: 100px;
 }
-.editDeleteButtons img{
+.editDeleteButtons img {
   width: 30px;
   height: auto;
   margin-right: 80px;
@@ -191,13 +211,13 @@ export default {
   transform: scale(1.15);
 }
 h1 {
-    font-size: 30px;
-    color: rgb(241, 237, 237);
+  font-size: 30px;
+  color: rgb(241, 237, 237);
 }
 
 #plus-sign {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 .container {
   font-family: "Franklin Gothic Medium";
@@ -225,9 +245,9 @@ button {
 }
 
 .addProfileInputs {
-    width: 100%;
-    font-size: 20px;
-    margin: 0;
+  width: 100%;
+  font-size: 20px;
+  margin: 0;
 }
 .header {
   text-align: center;
@@ -263,12 +283,12 @@ button {
 }
 .add-profile-box:hover {
   background-color: #303df3e7;
-  transform: scale(1.40);
+  transform: scale(1.4);
 }
 
 .profile-box:hover {
   background-color: #303df3e7;
-  transform: scale(1.30);
+  transform: scale(1.3);
 }
 .profile-box {
   background-color: #ccc;
@@ -330,19 +350,28 @@ button {
   font-weight: 700;
   outline: none;
   white-space: nowrap;
-  text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.8), 0px 10px 15px rgba(0, 0, 0, 0.4), 0px 20px 30px rgba(0, 0, 0, 0.4);
+  text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.8), 0px 10px 15px rgba(0, 0, 0, 0.4),
+    0px 20px 30px rgba(0, 0, 0, 0.4);
   margin-top: 20px;
 }
 
 /* STYLING FOR SHAKE ANIMATION */
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     transform: translateX(-5px);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     transform: translateX(5px);
   }
 }
@@ -358,7 +387,7 @@ body {
   background-size: 100vw 100vh;
   overflow: hidden;
   padding-top: 40vh;
-  margin: 0;
+  margin: 0px;
 }
 .txt {
   color: #e90418;
