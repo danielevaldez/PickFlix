@@ -8,7 +8,7 @@
         <form @submit.prevent="login">
           <h1>Login</h1>
           <div role="alert" class="alert" v-if="invalidCredentials">Invalid username and password!</div>
-          <div role="alert" class="alert" v-if="this.$route.query.registration">Thank you for registering, please sign in.</div>
+          <div role="alert2" class="alert2" v-if="this.$route.query.registration">Thank you for registering, please sign in.</div>
           <div class="form-input-group">
             <input type="text" id="username" v-model="user.username" required placeholder="Username"/>
           </div>
@@ -84,6 +84,11 @@ header {
 .alert {
   font-size: 15px;
   color: rgb(195, 51, 51);
+  margin-bottom: 10px;
+}
+.alert2 {
+  font-size: 15px;
+  color: rgb(57, 252, 90);
   margin-bottom: 10px;
 }
 p { 
