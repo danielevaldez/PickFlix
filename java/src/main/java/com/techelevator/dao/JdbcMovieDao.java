@@ -20,12 +20,12 @@ public class JdbcMovieDao implements MovieDao {
     }
 
     @Override
-    public List<Movie> getMovies() {
+    public List<Movie> getMovies(int profileId) {
         List<Movie> movies = new ArrayList<>();
-        String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id, image_path FROM movie";
+        String sql = "SELECT movie_id, movie_title, movie_duration, movie_release, movie_description, genre_id, image_path FROM movie JOIN profile_genre USING (genre_id) WHERE profile_id = ?";
 
         try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, profileId);
             while (results.next()) {
                 Movie movie = mapRowToMovie(results);
                 movies.add(movie);

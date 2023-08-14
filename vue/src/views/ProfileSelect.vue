@@ -2,10 +2,8 @@
   <div class="container">
     <header><div class="txt" contenteditable="true">PICKFLIX</div></header>
     <div v-if="!stillLoading">
+      <h1 id="watching">Who's watching?</h1>
     <div role="alert" v-if="profileCreationErrors">{{ profileCreationErrorMsg }}</div>
-    <div v-if="showProfileOptions" class="profileOptions">
-      <profile-options :profile="selectedProfile" @close="closeProfile"></profile-options>
-    </div>
     <ul class="profile-list" v-if="!showProfileOptions">
       <li
         class="profile-item"
@@ -13,7 +11,11 @@
         :key="profile.ID"
         @click="selectProfile(profile)"
       >
-        <div class="profile-box">
+        <div class="editDeleteButtons" v-if="showEditDelete">
+            <img src="../../img/editIcon.png" />
+            <img src="../../img/deleteIcon.png" @click="deleteProfile(profile)"/>
+          </div>
+        <div class="profile-box" :class="{ 'shake-animation': showEditDelete }">
           <div v-if="profile.profileIcon == 'Horror'">
             <img src="../../img/profileicons/horror.png" class="icons" />
           </div>
@@ -32,22 +34,18 @@
           <div class="profile-name">{{ profile.profileName }}</div>
         </div>
       </li>
-      <li class="add-profile-item" v-if="!showProfileOptions">
-        <div class="add-profile-box" @click="showAddProfileForm = true">
-          Add Profile
-        </div>
-      </li>
+      <li class="add-profile-box" v-if="!showProfileOptions && !showEditDelete" @click="showAddProfileForm = true"><img id="plus-sign" src="../../img/plus.png" /></li>
     </ul>
-    <div v-if="showAddProfileForm" class="add-profile-form">
+    <div v-if="showAddProfileForm" class="modal-backdrop">
+        <div class="add-profile-modal">
+              <h1>New Profile</h1>
       <form @submit.prevent="addProfile()">
-        <label for="name" class="addProfileLabels">Name</label>
         <input
           v-model="newProfile.profileName"
           name="name"
           class="addProfileInputs"
+          placeholder="Profile Name"
         />
-        <label for="Genre" id="Dropdown" class="addProfileLabels"
-          >Profile Icon</label
         >
         <br />
         <select
@@ -55,27 +53,29 @@
           v-model="newProfile.profileIcon"
           class="addProfileInputs"
         >
+        <option value="" disabled selected hidden>Favorite Genre</option>
           <option value="Comedy">Comedy</option>
           <option value="Sci-Fi">Sci-Fi</option>
           <option value="Action">Action</option>
           <option value="Fantasy">Fantasy</option>
           <option value="Horror">Horror</option>
         </select>
-        <br />
-        <button type="submit">Add</button>
-        <button @click="cancelAddProfile">Cancel</button>
+        <div class="button-container">
+            <button type="submit">Save Profile</button>
+            <button @click="cancelAddProfile">Cancel</button>
+        </div>
       </form>
     </div>
     </div>
+    <div class="manage-profiles" v-if="!showEditDelete"><button @click="showEditDelete = true">Manage Profiles</button></div></div>
+    <div class="manage-profiles" v-if="showEditDelete"><button @click="showEditDelete = false">Close</button></div>
   </div>
 </template>
 
 <script>
-import ProfileOptions from "../components/ProfileOptions.vue";
 import profileService from "../services/ProfileService";
 
 export default {
-  components: { ProfileOptions },
   name: "profileselect",
   data() {
     return {
@@ -91,6 +91,7 @@ export default {
       showProfileOptions: false,
       selectedProfile: "",
       stillLoading: true,
+      showEditDelete: false,
     };
   },
   created() {
@@ -131,10 +132,8 @@ export default {
           }
         });
     },
-    closeProfile(action) {
-      if (action == 1) {
-        //open the browse page
-      } else if (action == 2) {
+    deleteProfile(){
+      if(confirm("Are you sure you want to delete this profile?")){
         profileService
           .deleteProfile(
             this.selectedProfile.userId,
@@ -149,12 +148,10 @@ export default {
             console.error("Error deleting profile:", error);
           });
       }
-      this.selectedProfile = "";
-      this.showProfileOptions = false;
     },
     selectProfile(clickedProfile) {
-      this.selectedProfile = { ...clickedProfile };
-      this.showProfileOptions = true;
+      this.$store.commit("SET_PROFILE_ID", clickedProfile.profileId);
+      this.$router.push("/browse");
     },
     cancelAddProfile() {
       this.showAddProfileForm = false;
@@ -166,9 +163,46 @@ export default {
 </script>
 
 <style scoped>
+#watching {
+  font-size: 50px;
+  margin-top: 100px;
+}
+.editDeleteButtons img{
+  width: 30px;
+  height: auto;
+  margin-right: 80px;
+  margin-left: 25px;
+}
+.manage-profiles {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+.manage-profiles button {
+  border-style: solid;
+  border-radius: 50px;
+  padding: 15px;
+  width: 200px;
+  font-size: 20px;
+  background-color: rgb(104, 102, 102);
+  color: #ccc;
+}
+.manage-profiles:hover {
+  transform: scale(1.15);
+}
+h1 {
+    font-size: 30px;
+    color: rgb(241, 237, 237);
+}
+
+#plus-sign {
+    width: 100%;
+    height: 100%;
+}
 .container {
   font-family: "Franklin Gothic Medium";
-  background-color: #141414;
+  background-image: url("../../img/profileselectbackground.jpg");
+  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -191,30 +225,19 @@ button {
 }
 
 .addProfileInputs {
-  width: 200px;
-  font-size: 20px;
+    width: 100%;
+    font-size: 20px;
+    margin: 0;
 }
 .header {
   text-align: center;
 }
-.profileOptions {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .profile-box {
-  border-radius: 100px;
+  border-radius: 200px;
   width: 200px;
   height: 200px;
   border: 2px solid #ccc;
-  padding: 5px;
-  margin-top: 150px;
+  padding: 10px;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;
   text-align: center;
@@ -226,35 +249,26 @@ button {
   color: white;
 }
 .add-profile-box {
+  border-radius: 200px;
   width: 150px;
   height: 150px;
+  border-color: black;
   border: 2px solid #ccc;
-  padding: 20px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
   text-align: center;
-  font-size: 20px;
-  margin-top: 150px;
-  margin-left: 50px;
   position: relative;
+  background-color: #ccc;
+  margin-left: 20px;
 }
-
-.add-profile-box:hover::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("../../img/addition.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.5;
+.add-profile-box:hover {
+  background-color: #303df3e7;
+  transform: scale(1.40);
 }
 
 .profile-box:hover {
-  background-color: #ff3131;
-  transform: scale(1.05);
+  background-color: #303df3e7;
+  transform: scale(1.30);
 }
 .profile-box {
   background-color: #ccc;
@@ -263,27 +277,36 @@ button {
   width: 100%;
   height: 100%;
 }
-.add-profile-box:hover {
-  background-color: #ff3131;
-}
 
-.add-profile-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  border: 1px solid #ccc;
-  margin-top: 20px;
-  max-width: 300px;
-  margin: 0 auto;
-}
-
-.add-profile-form input,
-.add-profile-form textarea {
-  display: block;
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  margin-bottom: 10px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-profile-modal {
+  background-color: rgb(0, 0, 0);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px #e90417de;
+  width: 200px;
+  height: auto;
+}
+
+.add-profile-modal form {
+  padding: 0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-list {
@@ -300,27 +323,6 @@ button {
   margin: 20px;
 }
 
-.remove-profile-button {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ff3131;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.remove-profile-button:hover {
-  background-color: #ff0000;
-}
-.select-profile-header {
-  text-align: center;
-  padding: 20px;
-  color: white;
-}
-
 .txt {
   color: #e90418;
   text-align: center;
@@ -331,6 +333,24 @@ button {
   text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.8), 0px 10px 15px rgba(0, 0, 0, 0.4), 0px 20px 30px rgba(0, 0, 0, 0.4);
   margin-top: 20px;
 }
+
+/* STYLING FOR SHAKE ANIMATION */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.shake-animation {
+  animation: shake 2s infinite;
+}
+
 /* STYLING FOR LOGO ANIMATION */
 @import url("https://fonts.googleapis.com/css?family=Roboto:700,900");
 body {
