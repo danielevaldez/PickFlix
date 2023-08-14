@@ -24,6 +24,7 @@ export default new Vuex.Store({
     token: currentToken || "",
     user: currentUser || {},
     userId: "",
+    recommendedMovies: [],
     profiles: [],
     profileId: "",
     profileName: "",
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     },
     SET_PROFILES(state, profiles) {
       state.profiles = profiles;
+    },
+    SET_RECOMMENDED_MOVIES(state, recommendedMovies) {
+      state.recommendedMovies = recommendedMovies;
     },
     SET_AUTH_TOKEN(state, token) {
       state.token = token;

@@ -1,9 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-
-    getMovies(profileID){
-        return axios.get('/browse/' + profileID)
-    }
-    
-}
+  getMovies(profileId) {
+    return axios.get("/movies/browse/" + profileId);
+  },
+};

@@ -38,6 +38,7 @@ CREATE TABLE Movie (
     movie_release INT,
     movie_description TEXT,
     genre_id INT,
+	image_path varchar(100),
 	CONSTRAINT FK_movie_genre FOREIGN KEY (genre_id) REFERENCES genre (genre_id)
 );
 

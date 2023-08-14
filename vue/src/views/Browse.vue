@@ -21,13 +21,13 @@
           <div class="movie-containers">
             <!-- Loop through recommendedMovies and display movie images -->
             <div
-              v-for="recommendedMovie in recommendedMovies"
-              :key="recommendedMovie.id"
+              v-for="recommendedMovie in this.$store.state.recommendedMovies"
+              :key="recommendedMovie.ID"
               class="movie-container"
               @click="showMovieDetails(recommendedMovie)"
             >
               <img
-                :src="recommendedMovie.poster"
+                :src="recommendedMovie.imagePath"
                 alt="Movie Poster"
                 class="movie-poster"
               />
@@ -40,30 +40,32 @@
 </template>
 
 <script>
+import browseService from "../services/BrowseService";
+
 export default {
   name: "Browse",
   data() {
     return {
       selectedProfile: this.$store.state.profileName,
-      recommendedMovies: [],
-      // array containing movie data
-      movies: [],
     };
+  },
+  created() {
+    this.getRecommendedMovies();
   },
   methods: {
     // gets recommended movies for selected profile
-    async fetchRecommendedMoviesForProfile() {
-      try {
-        const profileId = 1; // Replace with the actual profile ID
-        // gets recommended movies from the server
-        const response = await fetch(`/movies/browse/${profileId}`);
-        const data = await response.json();
-        // stores movies in the recommendedMovies array
-        this.recommendedMovies = data;
-      } catch (error) {
-        console.error("Error fetching recommended movies:", error);
-      }
+    getRecommendedMovies() {
+      browseService
+        .getMovies(this.$store.state.profileId)
+        .then((response) => {
+          console.log(response.data);
+          this.$store.commit("SET_RECOMMENDED_MOVIES", response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching movies:", error);
+        });
     },
+    showMovieDetails() {},
     // function to clear authentication state and redirects to login
     logout() {
       this.$store.commit("LOGOUT");
