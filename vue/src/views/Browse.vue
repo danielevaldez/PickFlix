@@ -130,23 +130,21 @@ nav {
   font-family: Arial;
 }
 
-.btn {
-  border: 1px solid #fff;
-  border-radius: 2px;
-  background: none;
-  color: #ffffff;
-  height: 35px;
-  padding: 0 20px;
-  margin-left: 10px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  cursor: pointer;
-}
 
 .logout-btn {
   background: #dd0e15;
   border-color: #dd0e15;
   font-family: Arial;
+   border-style: solid;
+  border-radius: 50px;
+  padding: 8px 15px; 
+  font-size: 16px; 
+  background-color: rgb(221, 14, 21);
+  color: #ffffff;
+  cursor: pointer;
+  margin-top: 10px; 
+  margin-right: 10px; 
+  
 }
 .switch-profile-btn {
   border-style: solid;
@@ -154,7 +152,7 @@ nav {
   padding: 8px 15px; 
   font-size: 16px; 
   background-color: rgb(104, 102, 102);
-  color: #ccc;
+  color: #ffffff;
   cursor: pointer;
   margin-top: 10px; 
   margin-right: 10px; 
@@ -199,25 +197,6 @@ nav {
 
 .join-msg {
   color: #fff;
-  font-family: Arial;
-}
-
-.btn {
-  border: 1px solid #fff;
-  border-radius: 2px;
-  background: none;
-  color: #fff;
-  height: 35px;
-  padding: 0 20px;
-  margin-left: 10px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.logout-btn {
-  background: #dd0e15;
-  border-color: #dd0e15;
   font-family: Arial;
 }
 
