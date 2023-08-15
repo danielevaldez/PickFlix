@@ -1,3 +1,4 @@
+
 <template>
   <body>
     <div>
@@ -31,10 +32,25 @@
               :src="selectedMovie.imagePath"
               alt="Movie Poster"
             />
-            {{ selectedMovie.movieTitle }}
-            {{ selectedMovie.movieDescription }}
-            {{ selectedMovie.movieRelease }}
-            {{ selectedMovie.movieDuration }}
+            <div class="movie-info">
+              <h3 class="movie-title">{{ selectedMovie.movieTitle }}</h3>
+              <p class="movie-release-duration">
+                Released: {{ selectedMovie.movieRelease }} | Duration: {{ selectedMovie.movieDuration }}
+              </p>
+              <p class="movie-description">{{ selectedMovie.movieDescription }}</p>
+              <!-- Star Rating -->
+              <div id="rating">
+      <span
+        v-for="index in 5"
+        :key="index"
+        :class="{ 'hover': index <= selectedStar }"
+        @mouseenter="enterStarListener(index)"
+        @click="rateMovie(index)"
+      >
+        ★
+      </span>
+    </div>
+            </div>
           </div>
         </div>
         <!-- Container for recommended movie posters -->
@@ -62,6 +78,7 @@
 
 <script>
 import browseService from "../services/BrowseService";
+import StarRatingService from "../components/StarRating.vue";
 
 export default {
   name: "Browse",
@@ -76,11 +93,15 @@ export default {
       },
       selectedProfile: this.$store.state.profileName,
       displayMovieDetails: false,
+      
+      selectedStar: 0,
+      selectedMovieId: 1, // Adjust with the actual movie ID
     };
   },
   created() {
     this.getRecommendedMovies();
   },
+  
   methods: {
     // gets recommended movies for selected profile
     getRecommendedMovies() {
@@ -112,6 +133,12 @@ export default {
     logout() {
       this.$store.commit("LOGOUT");
       this.$router.push("/login");
+    },
+    enterStarListener(index) {
+    this.selectedStar = index;
+  },
+    rateMovie(rating) {
+      StarRatingService.setStarRating(this.selectedMovieId, rating);
     },
   },
 };
@@ -263,7 +290,7 @@ nav {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
@@ -272,9 +299,9 @@ nav {
 }
 
 .movie-details {
-  background-color: rgb(68, 68, 68);
+  background-color: rgba(68, 68, 68, 0.445);
   color: white;
-  width: 25%;
+  width: 45%;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
@@ -297,6 +324,22 @@ nav {
   transform: scale(1.15);
 }
 
+.movie-title {
+   text-decoration: underline;
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.movie-description {
+  margin-bottom: 10px;
+  margin-top: 25px;
+}
+
+.movie-release-duration {
+
+  color: #ccc;
+}
+
 .recommendation-text {
   display: flex;
   justify-content: flex-start;
@@ -315,5 +358,31 @@ nav {
   /* allows user to scroll if movies do not fit screen */
   flex-wrap: nowrap;
   overflow-x: auto;
+}
+
+#rating {
+  text-align: center;
+  perspective: 250px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+#rating span {
+  cursor: pointer;
+  font-size: 50px;
+  padding: 0 10px;
+  color: #fff;
+  opacity: 0.5;
+  transition: all 150ms;
+  display: inline-block;
+  transform: rotateX(45deg);
+  transform-origin: center bottom;
+}
+
+#rating span.hover {
+  color: #ff0;
+  opacity: 1;
+  transform: rotateX(0deg);
+  text-shadow: 0 0 30px #ffc;
 }
 </style>
