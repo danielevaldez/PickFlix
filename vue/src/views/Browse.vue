@@ -200,25 +200,6 @@ nav {
   font-family: Arial;
 }
 
-/* .btn {
-  border: 1px solid #fff;
-  border-radius: 2px;
-  background: none;
-  color: #fff;
-  height: 35px;
-  padding: 0 20px;
-  margin-left: 10px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.logout-btn {
-  background: #dd0e15;
-  border-color: #dd0e15;
-  font-family: Arial;
-}
- */
 .movie-poster-list {
   display: flex;
   justify-content: center;
