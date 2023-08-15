@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <header><div class="txt" contenteditable="true">PICKFLIX</div></header>
+    <header>
+      <div class="tom" v-if="isTomProfile">
+        <img src="../../img/profileicons/tom.png" />
+      </div>
+      <div class="txt">PICKFLIX</div>
+    </header>
     <div v-if="!stillLoading">
       <h1 id="watching">Who's watching?</h1>
       <div role="alert" v-if="profileCreationErrors">
@@ -110,6 +115,7 @@ export default {
       showProfileOptions: false,
       stillLoading: true,
       showEditDelete: false,
+      tomTrue: false,
     };
   },
   created() {
@@ -175,6 +181,13 @@ export default {
       this.newProfile.profileIcon = "";
     },
   },
+  computed: {
+    isTomProfile() {
+      return this.$store.state.profiles.some(
+        (profile) => profile.profileName === "Tom"
+      );
+    },
+  },
 };
 </script>
 
@@ -209,6 +222,11 @@ export default {
 h1 {
   font-size: 30px;
   color: rgb(241, 237, 237);
+}
+
+header {
+  display: flex;
+  align-items: center;
 }
 
 #plus-sign {
@@ -349,6 +367,10 @@ button {
   text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.8), 0px 10px 15px rgba(0, 0, 0, 0.4),
     0px 20px 30px rgba(0, 0, 0, 0.4);
   margin-top: 20px;
+}
+
+.tom {
+  margin: 0 10px;
 }
 
 /* STYLING FOR SHAKE ANIMATION */
