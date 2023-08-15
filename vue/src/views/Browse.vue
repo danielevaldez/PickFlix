@@ -8,6 +8,9 @@
           </router-link>
           <div class="join-box">
             <button class="btn logout-btn" @click="logout">LOG OUT</button>
+            <button class="switch-profile-btn" @click="switchProfiles">
+              SWITCH PROFILES
+            </button>
           </div>
         </nav>
       </header>
@@ -66,6 +69,9 @@ export default {
     },
     showMovieDetails() {},
     // function to clear authentication state and redirects to login
+    switchProfiles() {
+      this.$router.push({ path: "/profileselect", query: { load: "false" } });
+    },
     logout() {
       this.$store.commit("LOGOUT");
       this.$router.push("/login");

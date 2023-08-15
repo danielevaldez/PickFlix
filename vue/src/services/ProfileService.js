@@ -9,7 +9,7 @@ export default {
     return axios.get("/profileselect/profiles/" + userID);
   },
 
-  deleteProfile(userID, profileID){
-    return axios.delete("/profileselect/profiles/" + userID + "/" + profileID)
-  }
+  deleteProfile(userId, profileId) {
+    return axios.delete("/profileselect/profiles/" + userId + "/" + profileId);
+  },
 };

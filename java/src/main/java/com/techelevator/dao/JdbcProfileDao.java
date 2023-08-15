@@ -89,12 +89,26 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public boolean deleteProfile(int userId, int profileId) {
         String deleteProfileSql = "DELETE FROM profile WHERE user_id = ? AND profile_id = ?;";
+        String deleteProfileGenreSql = "DELETE FROM profile_genre WHERE profile_id = ?";
+        boolean success = false;
+
         try {
-            int rowsAffected = jdbcTemplate.update(deleteProfileSql, userId, profileId);
-            return rowsAffected > 0;
+            int rowsAffected = jdbcTemplate.update(deleteProfileGenreSql, profileId);
+            if (rowsAffected < 1) {
+                success = true;
+            }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         }
+
+        try {
+            int rowsAffected = jdbcTemplate.update(deleteProfileSql, userId, profileId);
+            success = rowsAffected == 1;
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+
+        return success;
     }
 
     private Profile mapRowToProfile(SqlRowSet rs) {

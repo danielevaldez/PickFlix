@@ -86,7 +86,7 @@ VALUES
 ('The Lord of the Rings: The Fellowship of the Ring', '178', '2001','A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.', '5', '/MovieCovers/Fantasy/LoR.jpg');
 INSERT INTO movie (movie_title, movie_duration, movie_release, movie_description, genre_id, image_path)
 VALUES
-('Twilight', '122', '2008','When Bella Swan moves to a small town in the Pacific Northwest, she falls in love with Edward Cullen, a mysterious classmate who reveals himself to be a 108-year-old vampire.', '5', '/MovieCovers/Fantasy/twilight.jpg');
+('Twilight', '122', '2008','When Bella Swan moves to a small town in the Pacific Northwest, she falls in love with Edward Cullen, a mysterious classmate who reveals himself to be a 108-year-old vampire.', '5', '/MovieCovers/Fantasy/twighlight.jpg');
 INSERT INTO movie (movie_title, movie_duration, movie_release, movie_description, genre_id, image_path)
 VALUES
 ('Suicide Squad', '123', '2016','A secret government agency recruits some of the most dangerous incarcerated super-villains to form a defensive task force. Their first mission: save the world from the apocalypse.', '5', '/MovieCovers/Fantasy/SS.jpg');

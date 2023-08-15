@@ -17,7 +17,7 @@
             <img src="../../img/editIcon.png" />
             <img
               src="../../img/deleteIcon.png"
-              @click="deleteProfile(profile)"
+              @click.stop="deleteProfile(profile)"
             />
           </div>
           <div
@@ -108,7 +108,6 @@ export default {
       profileCreationErrorMsg: "",
       showAddProfileForm: false,
       showProfileOptions: false,
-      selectedProfile: "",
       stillLoading: true,
       showEditDelete: false,
     };
@@ -151,13 +150,10 @@ export default {
           }
         });
     },
-    deleteProfile() {
+    deleteProfile(selectedProfile) {
       if (confirm("Are you sure you want to delete this profile?")) {
         profileService
-          .deleteProfile(
-            this.selectedProfile.userId,
-            this.selectedProfile.profileId
-          )
+          .deleteProfile(selectedProfile.userId, selectedProfile.profileId)
           .then((response) => {
             if (response.status === 204) {
               this.getProfiles();
