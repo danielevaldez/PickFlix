@@ -134,7 +134,7 @@ nav {
   border: 1px solid #fff;
   border-radius: 2px;
   background: none;
-  color: #fff;
+  color: #ffffff;
   height: 35px;
   padding: 0 20px;
   margin-left: 10px;
@@ -148,6 +148,18 @@ nav {
   border-color: #dd0e15;
   font-family: Arial;
 }
+.switch-profile-btn {
+  border-style: solid;
+  border-radius: 50px;
+  padding: 8px 15px; 
+  font-size: 16px; 
+  background-color: rgb(104, 102, 102);
+  color: #ccc;
+  cursor: pointer;
+  margin-top: 10px; 
+  margin-right: 10px; 
+}
+
 
 body {
   background-image: url("../../img/browsebg.png");
