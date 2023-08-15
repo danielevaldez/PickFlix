@@ -13,27 +13,27 @@
       </header>
       <main>
         <!-- Top 5 recommended movies section -->
-        <section class="recommended-movies">
-          <h2 class="recommendation-text">
-            Top 5 picks for {{ selectedProfile }}
-          </h2>
-          <!-- Container for recommended movie posters -->
-          <div class="movie-containers">
-            <!-- Loop through recommendedMovies and display movie images -->
-            <div
+        <h2 class="recommendation-text">
+          Top 5 picks for {{ selectedProfile }}
+        </h2>
+        <!-- Container for recommended movie posters -->
+        <div class="movie-containers">
+          <!-- Loop through recommendedMovies and display movie images -->
+          <ul class="movie-poster-list">
+            <li
+              class="movie-container"
               v-for="recommendedMovie in this.$store.state.recommendedMovies"
               :key="recommendedMovie.ID"
-              class="movie-container"
               @click="showMovieDetails(recommendedMovie)"
             >
               <img
+                class="movie-poster"
                 :src="recommendedMovie.imagePath"
                 alt="Movie Poster"
-                class="movie-poster"
               />
-            </div>
-          </div>
-        </section>
+            </li>
+          </ul>
+        </div>
       </main>
     </div>
   </body>
@@ -58,7 +58,6 @@ export default {
       browseService
         .getMovies(this.$store.state.profileId)
         .then((response) => {
-          console.log(response.data);
           this.$store.commit("SET_RECOMMENDED_MOVIES", response.data);
         })
         .catch((error) => {
@@ -144,10 +143,6 @@ nav {
   font-family: Arial;
 }
 
-.recommended-movies {
-  padding: 20px;
-}
-
 body {
   background-image: url("../../img/browsebg.png");
   background-size: cover;
@@ -165,7 +160,6 @@ nav {
   top: 0;
   z-index: 9;
   background: #000;
-  padding: 0 2.5vw;
   display: flex;
   align-items: center;
 }
@@ -209,31 +203,51 @@ nav {
   font-family: Arial;
 }
 
-.recommended-movies {
+.movie-poster-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+.movie-containers {
+  margin: 20px;
   padding: 20px;
 }
 
-.recommended-movies ul {
-  list-style: none;
-  padding-left: 0;
+.movie-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 65vh;
+  width: 15vw;
+  margin: 20px;
+  padding: 20px;
 }
 
-.recommended-movies li {
-  margin-bottom: 10px;
-  font-size: 1.2rem;
+.movie-poster {
+  height: 45vh;
+  width: 15vw;
+  cursor: pointer;
 }
 
-.recommended-movies li {
-  margin-bottom: 10px;
-  font-size: 1.2rem;
+.movie-poster:hover {
+  transform: scale(1.15);
 }
 
 .recommendation-text {
-  margin-top: 250px;
-  font-size: 30px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  height: auto;
+  width: 100%;
+  font-size: 60px;
   color: rgb(255, 255, 255);
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  margin-left: 50px;
+  padding-top: 120px;
+  padding-left: 50px;
+  padding-bottom: 20px;
 }
 
 .genre-movies {
