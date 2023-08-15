@@ -12,4 +12,8 @@ export default {
   deleteProfile(userId, profileId) {
     return axios.delete("/profileselect/profiles/" + userId + "/" + profileId);
   },
+
+  updateProfile(userId, profileId, profile) {
+    return axios.put("/profileselect/profiles/" + userId + "/" + profileId, profile);
+  },
 };

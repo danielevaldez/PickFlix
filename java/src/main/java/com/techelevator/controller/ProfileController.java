@@ -76,4 +76,21 @@ public class ProfileController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete profile.");
         }
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(path = "profiles/{userId}/{profileId}", method = RequestMethod.PUT)
+    public Profile updateProfile(@PathVariable int userId, @PathVariable int profileId, @RequestBody Profile updatedProfile) {
+        Profile existingProfile = profileDao.getProfileById(profileId);
+        if (existingProfile == null || existingProfile.getUserId() != userId) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found or unauthorized to update.");
+        }
+        updatedProfile.setProfileId(profileId);
+        updatedProfile.setUserId(userId);
+        try {
+            return profileDao.updateProfile(updatedProfile);
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update profile.");
+        }
+    }
+
 }

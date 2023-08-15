@@ -111,6 +111,28 @@ public class JdbcProfileDao implements ProfileDao {
         return success;
     }
 
+    @Override
+    public Profile updateProfile(Profile updatedProfile) {
+        String updateProfileSql = "UPDATE profile SET profile_name = ?, profile_icon = ? WHERE profile_id = ? AND user_id = ?;";
+        try {
+            int rowsAffected = jdbcTemplate.update(
+                    updateProfileSql,
+                    updatedProfile.getProfileName(),
+                    updatedProfile.getProfileIcon(),
+                    updatedProfile.getProfileId(),
+                    updatedProfile.getUserId()
+            );
+            if (rowsAffected == 1) {
+                return getProfileById(updatedProfile.getProfileId());
+            } else {
+                return null;
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+    }
+
+
     private Profile mapRowToProfile(SqlRowSet rs) {
         Profile profile = new Profile();
         profile.setProfileId(rs.getInt("profile_id"));

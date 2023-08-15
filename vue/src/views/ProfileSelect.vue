@@ -20,7 +20,7 @@
           @click="selectProfile(profile)"
         >
           <div class="editDeleteButtons" v-if="showEditDelete">
-            <img src="../../img/editIcon.png" />
+            <img src="../../img/editIcon.png" @click.stop="editProfile(profile)"/>
             <img
               src="../../img/deleteIcon.png"
               @click.stop="deleteProfile(profile)"
@@ -86,7 +86,40 @@
             </div>
           </form>
         </div>
-      </div>
+        </div>
+
+
+        <!-- UPDATE PROFILE -->
+        <div v-if="showEditProfileForm" class="modal-backdrop">
+        <div class="add-profile-modal">
+          <h1>Edit Profile</h1>
+          <form @submit.prevent="saveEdits">
+            <input
+              v-model="newProfile.profileName"
+              name="name"
+              class="addProfileInputs"
+            />
+            >
+            <br />
+            <select
+              name="Genre"
+              v-model="newProfile.profileIcon"
+              class="addProfileInputs"
+            >
+              <option value="Comedy">Comedy</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Action">Action</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Horror">Horror</option>
+            </select>
+            <div class="button-container">
+              <button type="submit">Save Profile</button>
+              <button @click="cancelAddProfile">Cancel</button>
+            </div>
+          </form>
+        </div>
+        </div>
+        <!-- -->
       <div class="manage-profiles" v-if="!showEditDelete">
         <button @click="showEditDelete = true">Manage Profiles</button>
       </div>
@@ -117,6 +150,7 @@ export default {
       stillLoading: this.$store.state.runAnimation,
       showEditDelete: false,
       tomTrue: false,
+      showEditProfileForm: false,
     };
   },
   created() {
@@ -136,14 +170,17 @@ export default {
           console.error("Error fetching profiles:", error);
         });
     },
-    addProfile() {
+    editProfile(profile){
+      this.showEditProfileForm = true;
+      this.newProfile = {...profile};
+    },
+    saveEdits(){
       profileService
-        .create(this.newProfile)
+        .updateProfile(this.newProfile.userId, this.newProfile.profileId, this.newProfile)
         .then((response) => {
-          if (response.status == 201) {
+          if(response.status == 200){
             this.getProfiles();
             this.cancelAddProfile();
-            this.showAddProfileForm = false;
           }
         })
         .catch((error) => {
@@ -153,7 +190,25 @@ export default {
           if (response.status === 400) {
             this.profileCreationErrorMsg = "Bad Request";
             this.cancelAddProfile();
-            this.showAddProfileForm = false;
+          }
+        })
+    },
+    addProfile() {
+      profileService
+        .create(this.newProfile)
+        .then((response) => {
+          if (response.status == 201) {
+            this.getProfiles();
+            this.cancelAddProfile();
+          }
+        })
+        .catch((error) => {
+          console.error("Response:", error.response);
+          const response = error.response;
+          this.profileCreationErrors = true;
+          if (response.status === 400) {
+            this.profileCreationErrorMsg = "Bad Request";
+            this.cancelAddProfile();
           }
         });
     },
@@ -178,6 +233,7 @@ export default {
       this.$router.push("/browse");
     },
     cancelAddProfile() {
+      this.showEditProfileForm = false;
       this.showAddProfileForm = false;
       this.newProfile.profileName = "";
       this.newProfile.profileIcon = "";

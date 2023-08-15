@@ -11,5 +11,5 @@ public interface ProfileDao {
     List<Profile> getProfilesByUserId(int id);
     Profile createProfile(CreateProfileDto profile);
     boolean deleteProfile(int userId, int profileId);
-    //updateProfile
+    Profile updateProfile(Profile updatedProfile);
 }
