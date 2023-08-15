@@ -19,6 +19,24 @@
         <h2 class="recommendation-text">
           Top 5 picks for {{ selectedProfile }}
         </h2>
+        <!-- Movie details view -->
+        <div
+          class="movie-details-container"
+          v-if="displayMovieDetails"
+          @click="hideDetails($event)"
+        >
+          <div class="movie-details">
+            <img
+              class="movie-details-poster"
+              :src="selectedMovie.imagePath"
+              alt="Movie Poster"
+            />
+            {{ selectedMovie.movieTitle }}
+            {{ selectedMovie.movieDescription }}
+            {{ selectedMovie.movieRelease }}
+            {{ selectedMovie.movieDuration }}
+          </div>
+        </div>
         <!-- Container for recommended movie posters -->
         <div class="movie-containers">
           <!-- Loop through recommendedMovies and display movie images -->
@@ -49,7 +67,15 @@ export default {
   name: "Browse",
   data() {
     return {
+      selectedMovie: {
+        movieTitle: "",
+        movieDuration: "",
+        movieRelease: "",
+        movieDescription: "",
+        imagePath: "",
+      },
       selectedProfile: this.$store.state.profileName,
+      displayMovieDetails: false,
     };
   },
   created() {
@@ -67,8 +93,19 @@ export default {
           console.error("Error fetching movies:", error);
         });
     },
-    showMovieDetails() {},
-    // function to clear authentication state and redirects to login
+    showMovieDetails(recommendedMovie) {
+      this.displayMovieDetails = true;
+      this.selectedMovie.movieTitle = recommendedMovie.movieTitle;
+      this.selectedMovie.movieDescription = recommendedMovie.movieDescription;
+      this.selectedMovie.movieDuration = recommendedMovie.movieDuration;
+      this.selectedMovie.movieRelease = recommendedMovie.movieRelease;
+      this.selectedMovie.imagePath = recommendedMovie.imagePath;
+    },
+    hideDetails(event) {
+      if (!this.$el.querySelector(".movie-details").contains(event.target)) {
+        this.displayMovieDetails = false;
+      }
+    },
     switchProfiles() {
       this.$router.push({ path: "/profileselect", query: { load: "false" } });
     },
@@ -130,34 +167,31 @@ nav {
   font-family: Arial;
 }
 
-
 .logout-btn {
   background: #dd0e15;
   border-color: #dd0e15;
   font-family: Arial;
-   border-style: solid;
+  border-style: solid;
   border-radius: 50px;
-  padding: 8px 15px; 
-  font-size: 16px; 
+  padding: 8px 15px;
+  font-size: 16px;
   background-color: rgb(221, 14, 21);
   color: #ffffff;
   cursor: pointer;
-  margin-top: 10px; 
-  margin-right: 10px; 
-  
+  margin-top: 10px;
+  margin-right: 10px;
 }
 .switch-profile-btn {
   border-style: solid;
   border-radius: 50px;
-  padding: 8px 15px; 
-  font-size: 16px; 
+  padding: 8px 15px;
+  font-size: 16px;
   background-color: rgb(104, 102, 102);
   color: #ffffff;
   cursor: pointer;
-  margin-top: 10px; 
-  margin-right: 10px; 
+  margin-top: 10px;
+  margin-right: 10px;
 }
-
 
 body {
   background-image: url("../../img/browsebg.png");
@@ -223,10 +257,40 @@ nav {
   padding: 20px;
 }
 
+.movie-details-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.movie-details {
+  background-color: rgb(68, 68, 68);
+  color: white;
+  width: 25%;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
 .movie-poster {
   height: 45vh;
   width: 15vw;
   cursor: pointer;
+}
+
+.movie-details-poster {
+  float: left;
+  margin-right: 20px;
+  height: 45vh;
+  width: 15vw;
 }
 
 .movie-poster:hover {
