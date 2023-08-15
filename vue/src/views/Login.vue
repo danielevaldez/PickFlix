@@ -46,6 +46,7 @@ export default {
         .login(this.user)
         .then((response) => {
           if (response.status == 200) {
+            this.$store.commit("ANIMATION_BOOLEAN", true);
             this.$store.commit("PLAY_LOGIN_SOUND");
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
             this.$store.commit("SET_USER", response.data.user);
