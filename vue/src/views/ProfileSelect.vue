@@ -4,7 +4,8 @@
       <div class="tom" v-if="isTomProfile">
         <img src="../../img/profileicons/tom.png" />
       </div>
-      <div class="txt">PICKFLIX</div>
+      <div class="txt" v-if="this.$store.state.runAnimation">PICKFLIX</div>
+      <div class="txtOther" v-else >PICKFLIX</div>
     </header>
     <div v-if="!stillLoading">
       <h1 id="watching">Who's watching?</h1>
@@ -113,7 +114,7 @@ export default {
       profileCreationErrorMsg: "",
       showAddProfileForm: false,
       showProfileOptions: false,
-      stillLoading: true,
+      stillLoading: this.$store.state.runAnimation,
       showEditDelete: false,
       tomTrue: false,
     };
@@ -171,6 +172,7 @@ export default {
       }
     },
     selectProfile(clickedProfile) {
+      this.$store.commit("ANIMATION_BOOLEAN", false);
       this.$store.commit("SET_PROFILE_ID", clickedProfile.profileId);
       this.$store.commit("SET_PROFILE_NAME", clickedProfile.profileName);
       this.$router.push("/browse");
@@ -355,6 +357,18 @@ button {
 
 .profile-item {
   margin: 20px;
+}
+
+.txtOther{
+   color: #e90418;
+  text-align: center;
+  font-size: 12vmin;
+  font-weight: 700;
+  outline: none;
+  white-space: nowrap;
+  text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.8), 0px 10px 15px rgba(0, 0, 0, 0.4),
+    0px 20px 30px rgba(0, 0, 0, 0.4);
+  margin-top: 20px;
 }
 
 .txt {

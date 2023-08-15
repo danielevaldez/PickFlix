@@ -28,8 +28,12 @@ export default new Vuex.Store({
     profiles: [],
     profileId: "",
     profileName: "",
+    runAnimation: true,
   },
   mutations: {
+    ANIMATION_BOOLEAN(state, bool){
+      state.runAnimation = bool;
+    },
     PLAY_LOGIN_SOUND() {
       loginSound.play();
     },
