@@ -7,6 +7,7 @@
       :key="index"
       :class="{ 'hover': index <= selectedStar }"
       @mouseenter="enterStarListener(index)"
+      @click="selectStar(index)"
     >
       ★ <!-- Unicode star character -->
     </span>
@@ -15,19 +16,23 @@
 
 <script>
 export default {
+  props: {
+    movieId: Number,
+    initialRating: Number,
+  },
   data() {
     return {
-      // Tracks the index of the currently selected star
-      selectedStar: 0,
+      selectedStar: this.initialRating,
     };
   },
   methods: {
-    // Triggered when the mouse enters a star
     enterStarListener(index) {
-      // Update selectedStar to match the hovered star's index
       this.selectedStar = index;
     },
-     movieRatings: {}, // to store star ratings for each movie
+    selectStar(index) {
+      this.selectedStar = index;
+      this.$emit("ratingChange", index); // Emit the rating change back to the parent component
+    },
   },
 };
 </script>
@@ -52,7 +57,6 @@ export default {
   transform: rotateX(45deg);
   transform-origin: center bottom;
 }
-
 
 #rating span.hover {
   color: #ff0;

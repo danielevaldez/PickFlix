@@ -1,4 +1,4 @@
-// An array to hold the star ratings for different movies
+// An object to hold the star ratings for different movies
 const starRatings = {};
 
 // Method to set a star rating for a movie
