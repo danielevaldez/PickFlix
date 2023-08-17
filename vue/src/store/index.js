@@ -2,6 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import sound from "../../public/icq2.mp3";
+import tom1 from "../../public/Soundbytes/1.mp3";
+import tom2 from "../../public/Soundbytes/2.mp3";
 
 Vue.use(Vuex);
 
@@ -17,7 +19,13 @@ if (currentToken != null) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${currentToken}`;
 }
 
+var tomOne = new Audio(tom1);
+var tomTwo = new Audio(tom2);
 var loginSound = new Audio(sound);
+
+function getRandomOneOrTwo() {
+  return Math.floor(Math.random() * 2) + 1;
+}
 
 export default new Vuex.Store({
   state: {
@@ -31,6 +39,14 @@ export default new Vuex.Store({
     runAnimation: true,
   },
   mutations: {
+    PLAY_TOM(){
+      var num = getRandomOneOrTwo() - 1;
+      if(num == 0){
+        tomOne.play();
+      } else {
+        tomTwo.play();
+      }
+    },
     ANIMATION_BOOLEAN(state, bool){
       state.runAnimation = bool;
     },

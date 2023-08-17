@@ -106,7 +106,6 @@ export default {
   created() {
     this.getRecommendedMovies();
   },
-  
   methods: {
     // gets recommended movies for selected profile
     getRecommendedMovies() {

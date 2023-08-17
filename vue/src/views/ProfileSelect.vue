@@ -2,7 +2,7 @@
   <div class="container">
     <header>
       <div class="tom" v-if="isTomProfile">
-        <img src="../../img/profileicons/tom.png" />
+        <img class="spin-image" src="../../img/profileicons/tom.png" @click="tomSounds" :class="{ 'spin-animation': isSpinning }" />
       </div>
       <div class="txt" v-if="this.$store.state.runAnimation">PICKFLIX</div>
       <div class="txtOther" v-else >PICKFLIX</div>
@@ -151,6 +151,7 @@ export default {
       showEditDelete: false,
       tomTrue: false,
       showEditProfileForm: false,
+      isSpinning: false
     };
   },
   created() {
@@ -160,6 +161,13 @@ export default {
     }, 5500);
   },
   methods: {
+    tomSounds(){
+      this.$store.commit("PLAY_TOM");
+      this.isSpinning = true;
+      setTimeout(() => {
+      this.isSpinning = false;
+    }, 1000);
+    },
     getProfiles() {
       profileService
         .getProfiles(this.$store.state.userId)
@@ -227,10 +235,12 @@ export default {
       }
     },
     selectProfile(clickedProfile) {
+      if(!this.showEditDelete){
       this.$store.commit("ANIMATION_BOOLEAN", false);
       this.$store.commit("SET_PROFILE_ID", clickedProfile.profileId);
       this.$store.commit("SET_PROFILE_NAME", clickedProfile.profileName);
       this.$router.push("/browse");
+      }
     },
     cancelAddProfile() {
       this.showEditProfileForm = false;
@@ -250,6 +260,14 @@ export default {
 </script>
 
 <style scoped>
+.spin-animation {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 #watching {
   font-size: 50px;
   margin-top: 100px;
