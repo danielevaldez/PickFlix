@@ -40,16 +40,20 @@
               <p class="movie-description">{{ selectedMovie.movieDescription }}</p>
               <!-- Star Rating -->
               <div id="rating">
-      <span
-        v-for="index in 5"
-        :key="index"
-        :class="{ 'hover': index <= selectedStar }"
-        @mouseenter="enterStarListener(index)"
-        @click="rateMovie(index)"
-      >
-        ★
-      </span>
-    </div>
+              <span
+                v-for="index in 5"
+                :key="index"
+                :class="{ 'hover': index <= selectedStar }"
+                @mouseenter="enterStarListener(index)"
+                @click="rateMovie(index)"
+              >
+                ★
+              </span>
+            </div>
+                    <!-- Heart Button -->
+          <button class="heart-button" @click="toggleHeart">
+            <span :class="{'red-heart': isHeartClicked}">♡</span>
+          </button>
             </div>
           </div>
         </div>
@@ -96,6 +100,7 @@ export default {
       
       selectedStar: 0,
       selectedMovieId: 1, // Adjust with the actual movie ID
+      isHeartClicked: false,
     };
   },
   created() {
@@ -139,6 +144,9 @@ export default {
   },
     rateMovie(rating) {
       StarRatingService.setStarRating(this.selectedMovieId, rating);
+    },
+    toggleHeart() {
+      this.isHeartClicked = !this.isHeartClicked;
     },
   },
 };
@@ -384,5 +392,20 @@ nav {
   opacity: 1;
   transform: rotateX(0deg);
   text-shadow: 0 0 30px #ffc;
+}
+.heart-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 50px;
+  
+}
+
+.red-heart {
+  color: red;
+  font-size: 50px;
 }
 </style>
