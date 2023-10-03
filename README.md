@@ -3,5 +3,6 @@
 Below is a demo:
 
 
-https://github.com/danielevaldez/PickFlix/assets/132841981/42c0f6e3-e5f5-4b0b-a0ce-8a7218ae55f9
+
+https://github.com/danielevaldez/PickFlix/assets/132841981/b2c1cbbb-3f23-4a5a-af60-5722e1eea95b
 
