@@ -1,5 +1,2 @@
 # Final Capstone
-​
-This directory contains all of the starter projects for the final capstone.
-​
-Each project contains instructions that provides information about the starting code and explains how to get started with the final capstone project.
+​We created a movie recommendation website that allows users to find movies based on their favorite genres. The website will have a Vue.js front end for the user interface and a back end powered by Spring Boot with a PostgreSQL database to store movie information and user preferences.
